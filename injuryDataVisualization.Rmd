@@ -46,6 +46,7 @@ library(grid)
 library(tidyverse)
 library(ggrepel)
 library(treemap)
+library(RColorBrewer)
 plan(multiprocess)
 ```
 
@@ -240,14 +241,15 @@ injuryData_2017
 ```
 
 ```{r}
-vcd::mosaic(typeInjury ~ position1,spacing = vcd::spacing_equal(sp = unit(0, "lines")),labeling = vcd::labeling_border(rot_labels = c(90, -90, 0, 0),highlighting_fill = scale_colour_distiller,gp_labels = gpar(fontsize = 6),gp_varnames = gpar(fontsize = 14, fontface = 1),pos_labels = "center",just_labels = "center",shade=T, colorize = T,gp = gpar(fill=matrix(c("red","blue","light green", "green", "black","red","brown","white","blue"), 3, 3))),injuryData_2017)
+vcd::mosaic(typeInjury ~ position1,spacing = vcd::spacing_equal(sp = unit(0, "lines")),labeling = vcd::labeling_border(rot_labels = c(90, -90, 0, 0),gp_labels = gpar(fontsize = 6),gp_varnames = gpar(fontsize = 14, fontface = 1),pos_labels = "center",just_labels = "center"),injuryData_2017,highlighting_fill = brewer.pal(n = 8, 'Blues'))
 ```
 
 ```{r}
 ggplot(injuryData_2017)+
-  geom_bar(aes(x = typeInjury))+
+  geom_bar(aes(x = typeInjury),)+
   coord_flip() +
-  labs(x = "Injury",y="Number of players injured",title = "Injury by position")+facet_wrap(~position1,ncol=3) 
+  labs(x = "Injury",y="Number of players injured",title = "Injury by position")+facet_wrap(~position1,ncol=3)+
+  scale_fill_brewer(palette = 'PuBu')
 ```
 
 ```{r}
