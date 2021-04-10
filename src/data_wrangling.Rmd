@@ -394,32 +394,30 @@ bind_rows(#season_2019_players,
 
 ```{r}
 
-starters_top_guys <- teams_players_stats(seasons = 2020, types = "player", starters_bench = list("Starters")) %>% 
-  unnest(dataTable) %>% 
+starters <- teams_players_stats(seasons = 2020, types = "player", starters_bench = list("Starters")) %>% 
+  unnest(dataTable) 
+
+top_guys_bubble <- starters %>% 
+  #filter(gp > 25) %>% 
   semi_join(bubble_seeding_players, by = "namePlayer") %>% 
+  semi_join(covid_season_players_month_before, by = "namePlayer") %>% 
   group_by(slugTeam) %>% 
-  slice_max(gp, n = 6) 
+  slice_max(gp, n = 6)
+
+test <-  bubble_seeding_players %>% 
+  semi_join(covid_season_players_month_before, by = "namePlayer") %>% 
+  semi_join(starters, by = "namePlayer") 
 
 
-
-covid_season_players %>% 
-  semi_join(bubble_seeding_players, by = "namePlayer") %>% 
-  semi_join(starters_top_guys, by = "namePlayer") %>% 
+top_guys_bubble %>% 
   group_by(slugTeam) %>% 
   summarize(count = n())
 
-covid_season_players_month_before %>% 
-  bind_rows(bubble_seeding_players) %>% 
-  semi_join(starters_top_guys, by = "namePlayer") %>% 
-  ggplot(aes(x = drtg, y = ortg, color = df_type)) + 
-  geom_point(alpha = .7) + 
-  scale_x_reverse() + 
-  facet_wrap(~slugTeam)
 
 
-covid_season_players_month_before %>% 
+d3_data <- covid_season_players_month_before %>% 
   bind_rows(bubble_seeding_players) %>% 
-  semi_join(starters_top_guys, by = "namePlayer") %>% 
+  semi_join(top_guys_bubble, by = "namePlayer") %>% 
   left_join(bubble_teams, by = "slugTeam") %>% 
   select(name = "namePlayer",
          team_abb = "slugTeam",
@@ -429,7 +427,11 @@ covid_season_players_month_before %>%
          netrtg,
          df_type
          ) %>% 
-  write_csv("d3_data.csv")
+  pivot_wider(names_from = "df_type", values_from = c("ortg", "drtg", "netrtg"))
+ 
+d3_data %>%
+  write_csv("data/d3_data.csv")
+
 
 ```
 

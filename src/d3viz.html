@@ -1,0 +1,104 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8">
+	    <title>Scatterplot NBA</title>
+	    <script src="https://d3js.org/d3.v6.min.js"></script>
+	    <style>
+	      p, h1, h2, h3 {
+	        font-family: sans-serif;
+	      }
+	    </style>
+	</head>
+
+<body>
+	<div>Month before NBA shutdown</div>
+	<div>Bubble seeding games</div>
+	<div id = "scatterplot"></div>
+	
+	<script type="text/javascript">
+
+		// set the dimensions and margins of the graph
+		var margin = {top: 10, right: 10, bottom: 30, left: 30},
+		    width = 550 - margin.left - margin.right,
+		    height = 500 - margin.top - margin.bottom;
+		    // append the svg object to the body of the page
+		    var svg = d3.select("div#scatterplot")
+		      .append("svg")
+		        .attr("width", width + margin.left + margin.right)
+		        .attr("height", height + margin.top + margin.bottom)
+		      .append("g")
+		        .attr("transform",
+		              "translate(" + margin.left + "," + margin.top + ")")
+
+
+		var rowConverter = function (d) {
+		  return {
+			 name: d.name,
+	         team_abb: d.team_abb, 
+	         team_name: d.team_name,
+	         ortg_month_before: +d.ortg_month_before,
+	         drtg_month_before: +d.drtg_month_before,
+	         netrtg_month_before: +d.netrtg_month_before,
+	         ortg_bubble_seeding: +d.ortg_bubble_seeding,
+	         drtg_bubble_seeding: +d.drtg_bubble_seeding,
+	         netrtg_bubble_seeding: +d.netrtg_bubble_seeding,
+	         df_type: d.df_type
+		    }
+		};  
+
+		d3.csv("https://raw.githubusercontent.com/hernandz/nba_edav_2021/santos_questions/data/d3_data.csv", rowConverter)
+			.then(function(data) {
+
+		// stuff that requires the loaded data
+			    // Add X axis
+				var x = d3.scaleLinear()
+				  .domain([135, 65])
+				  .range([0, width]);
+				svg.append("g")
+				  .attr("transform", "translate(0," + height + ")")
+				  .call(d3.axisBottom(x));
+
+				// Add Y axis
+				var y = d3.scaleLinear()
+				  .domain([50, 150])
+				  .range([ height, 0]);
+				svg.append("g")
+				  .call(d3.axisLeft(y));
+
+				// Add dots
+				svg.append('g')
+				  .selectAll("dot")
+				  .data(data)
+				  .enter()
+				  .append("circle")
+				    .attr("cx", function (d) { return x(d.drtg_month_before); } )
+				    .attr("cy", function (d) { return y(d.ortg_month_before); } )
+				    .attr("r", 3)
+				   // .attr("display: none")
+				    .style("fill", "red")
+
+				})
+
+			d3.attr("display", function(d){
+							if(d.df_type == display_choice){
+								return ""; 
+							} else {
+								return "none"
+							}
+						})
+		
+
+
+
+
+
+
+	</script>
+
+	</body>
+
+</html>
