@@ -1,0 +1,263 @@
+name,team_abb,team_name,ortg,drtg,netrtg,df_type
+Aaron Gordon,ORL,Orlando Magic,118.9,113.8,5.1,month_before
+Aaron Holiday,IND,Indiana Pacers,102.4,104.2,-1.7,month_before
+Al Horford,PHI,Philadelphia 76ers,119.4,115.6,3.9,month_before
+Anthony Davis,LAL,Los Angeles Lakers,111.9,102.1,9.8,month_before
+Bam Adebayo,MIA,Miami Heat,112.2,110.2,2,month_before
+Ben McLemore,HOU,Houston Rockets,117.7,112.2,5.5,month_before
+Ben Simmons,PHI,Philadelphia 76ers,107.1,104,3.1,month_before
+Bogdan Bogdanovic,SAC,Sacramento Kings,113.5,114.1,-0.5,month_before
+Brandon Ingram,NOP,New Orleans Pelicans,111.7,101.1,10.6,month_before
+Brook Lopez,MIL,Milwaukee Bucks,103.4,97.1,6.3,month_before
+Buddy Hield,SAC,Sacramento Kings,112.1,106,6.1,month_before
+CJ McCollum,POR,Portland Trail Blazers,114.8,114.5,0.4,month_before
+Caris LeVert,BKN,Brooklyn Nets,110.4,108.4,1.9,month_before
+Carmelo Anthony,POR,Portland Trail Blazers,113.2,114.5,-1.3,month_before
+Chris Paul,OKC,Oklahoma City Thunder,117.5,108.6,8.9,month_before
+Damian Lillard,POR,Portland Trail Blazers,113.9,114.8,-0.9,month_before
+Daniel Theis,BOS,Boston Celtics,112,106.3,5.7,month_before
+Danilo Gallinari,OKC,Oklahoma City Thunder,118.3,110.9,7.5,month_before
+Danny Green,LAL,Los Angeles Lakers,110.1,103.9,6.3,month_before
+Danuel House Jr.,HOU,Houston Rockets,108.5,109,-0.5,month_before
+Dario Saric,PHX,Phoenix Suns,113.1,117,-3.9,month_before
+De'Aaron Fox,SAC,Sacramento Kings,114.1,117,-2.9,month_before
+DeMar DeRozan,SAS,San Antonio Spurs,112,116.6,-4.6,month_before
+Deandre Ayton,PHX,Phoenix Suns,106.4,111.2,-4.8,month_before
+Dejounte Murray,SAS,San Antonio Spurs,110.3,118,-7.6,month_before
+Derrick Favors,NOP,New Orleans Pelicans,115.8,100.8,15,month_before
+Derrick White,SAS,San Antonio Spurs,107.3,108,-0.7,month_before
+Devin Booker,PHX,Phoenix Suns,114.7,116.1,-1.4,month_before
+Dillon Brooks,MEM,Memphis Grizzlies,105.3,104.1,1.2,month_before
+Donovan Mitchell,UTA,Utah Jazz,109.4,116.4,-7,month_before
+Donte DiVincenzo,MIL,Milwaukee Bucks,106.4,102.4,4,month_before
+Dorian Finney-Smith,DAL,Dallas Mavericks,112.2,102.1,10,month_before
+Duncan Robinson,MIA,Miami Heat,116.4,104.2,12.2,month_before
+Eric Bledsoe,MIL,Milwaukee Bucks,108.3,101.6,6.7,month_before
+Evan Fournier,ORL,Orlando Magic,112.8,121,-8.2,month_before
+Fred VanVleet,TOR,Toronto Raptors,102.1,94.5,7.6,month_before
+Garrett Temple,BKN,Brooklyn Nets,108.5,106.3,2.2,month_before
+Gary Trent Jr.,POR,Portland Trail Blazers,103.2,115.4,-12.2,month_before
+Giannis Antetokounmpo,MIL,Milwaukee Bucks,112.9,89.5,23.5,month_before
+Glenn Robinson III,PHI,Philadelphia 76ers,119.9,122.9,-3,month_before
+Gordon Hayward,BOS,Boston Celtics,110.4,104.8,5.7,month_before
+Gorgui Dieng,MEM,Memphis Grizzlies,103.7,103.7,0,month_before
+Harrison Barnes,SAC,Sacramento Kings,113.7,115.8,-2.1,month_before
+Hassan Whiteside,POR,Portland Trail Blazers,113.7,112.6,1.1,month_before
+Isaac Bonga,WAS,Washington Wizards,109.3,99.6,9.7,month_before
+Ish Smith,WAS,Washington Wizards,107,106.8,0.2,month_before
+Ivica Zubac,LAC,LA Clippers,113.1,101.6,11.5,month_before
+JJ Redick,NOP,New Orleans Pelicans,118.9,114.2,4.7,month_before
+Ja Morant,MEM,Memphis Grizzlies,105.4,109.1,-3.7,month_before
+JaKarr Sampson,IND,Indiana Pacers,105.7,99,6.7,month_before
+JaVale McGee,LAL,Los Angeles Lakers,106.8,102.1,4.7,month_before
+Jae Crowder,MIA,Miami Heat,108.8,115,-6.3,month_before
+Jakob Poeltl,SAS,San Antonio Spurs,105.1,103.3,1.8,month_before
+Jamal Murray,DEN,Denver Nuggets,111.9,109.7,2.3,month_before
+James Harden,HOU,Houston Rockets,114.1,106.7,7.4,month_before
+Jaren Jackson Jr.,MEM,Memphis Grizzlies,103.2,117.6,-14.4,month_before
+Jarrett Allen,BKN,Brooklyn Nets,101.7,108,-6.4,month_before
+Jaylen Brown,BOS,Boston Celtics,114.3,111.5,2.8,month_before
+Jayson Tatum,BOS,Boston Celtics,112.3,108,4.3,month_before
+Jerami Grant,DEN,Denver Nuggets,113.1,115.6,-2.5,month_before
+Jimmy Butler,MIA,Miami Heat,114,115.4,-1.3,month_before
+Joe Harris,BKN,Brooklyn Nets,108.7,112.2,-3.5,month_before
+Joe Ingles,UTA,Utah Jazz,113.1,110.7,2.4,month_before
+Joel Embiid,PHI,Philadelphia 76ers,114.4,105.7,8.7,month_before
+Jonas Valanciunas,MEM,Memphis Grizzlies,105.5,107.1,-1.6,month_before
+Josh Richardson,PHI,Philadelphia 76ers,114.7,106.6,8.1,month_before
+Jrue Holiday,NOP,New Orleans Pelicans,115.8,105.5,10.3,month_before
+Kawhi Leonard,LAC,LA Clippers,114.3,106.3,7.9,month_before
+Kemba Walker,BOS,Boston Celtics,109.9,108.1,1.8,month_before
+Kendrick Nunn,MIA,Miami Heat,118.2,115.6,2.6,month_before
+Kentavious Caldwell-Pope,LAL,Los Angeles Lakers,106.4,101.8,4.7,month_before
+Khem Birch,ORL,Orlando Magic,58.1,68.3,-10.2,month_before
+Khris Middleton,MIL,Milwaukee Bucks,110.1,99.1,11,month_before
+Kristaps Porzingis,DAL,Dallas Mavericks,118.3,101.6,16.7,month_before
+Kyle Anderson,MEM,Memphis Grizzlies,100.9,106.2,-5.3,month_before
+Kyle Lowry,TOR,Toronto Raptors,112,103.8,8.2,month_before
+Landry Shamet,LAC,LA Clippers,112.7,105.1,7.6,month_before
+LeBron James,LAL,Los Angeles Lakers,107.2,100.9,6.3,month_before
+Lonnie Walker IV,SAS,San Antonio Spurs,106,117.2,-11.3,month_before
+Lonzo Ball,NOP,New Orleans Pelicans,114.6,106,8.5,month_before
+Luguentz Dort,OKC,Oklahoma City Thunder,114.7,110.2,4.5,month_before
+Luka Doncic,DAL,Dallas Mavericks,113.9,108.1,5.8,month_before
+Malcolm Brogdon,IND,Indiana Pacers,108.9,101.6,7.3,month_before
+Marc Gasol,TOR,Toronto Raptors,73.5,90.9,-17.4,month_before
+Marcus Morris Sr.,LAC,LA Clippers,115.2,103.5,11.7,month_before
+Marcus Smart,BOS,Boston Celtics,111.7,105.2,6.6,month_before
+Markelle Fultz,ORL,Orlando Magic,114.3,116.3,-2,month_before
+Markieff Morris,LAL,Los Angeles Lakers,100.6,99.3,1.3,month_before
+Maxi Kleber,DAL,Dallas Mavericks,111.4,109.5,1.9,month_before
+Mikal Bridges,PHX,Phoenix Suns,113.7,111.1,2.6,month_before
+Mike Conley,UTA,Utah Jazz,112.7,110.2,2.4,month_before
+Monte Morris,DEN,Denver Nuggets,111.4,111.4,0,month_before
+Myles Turner,IND,Indiana Pacers,103.4,98.8,4.6,month_before
+Nemanja Bjelica,SAC,Sacramento Kings,111.9,109.9,2,month_before
+Nikola Jokic,DEN,Denver Nuggets,112.7,111.4,1.3,month_before
+Nikola Vucevic,ORL,Orlando Magic,116.5,114.5,1.9,month_before
+Norman Powell,TOR,Toronto Raptors,116.4,111.8,4.6,month_before
+OG Anunoby,TOR,Toronto Raptors,111.1,105.9,5.2,month_before
+P.J. Tucker,HOU,Houston Rockets,111.4,110.6,0.8,month_before
+Pascal Siakam,TOR,Toronto Raptors,108.2,102.2,6,month_before
+Patrick Beverley,LAC,LA Clippers,116.8,101.4,15.4,month_before
+Paul George,LAC,LA Clippers,114.8,107.1,7.7,month_before
+Paul Millsap,DEN,Denver Nuggets,109.1,105,4.1,month_before
+Richaun Holmes,SAC,Sacramento Kings,141.8,116,25.7,month_before
+Ricky Rubio,PHX,Phoenix Suns,116.4,108.2,8.2,month_before
+Robert Covington,HOU,Houston Rockets,110.4,107.4,3,month_before
+Rodions Kurucs,BKN,Brooklyn Nets,95.2,105.4,-10.2,month_before
+Royce O'Neale,UTA,Utah Jazz,108.1,112.9,-4.7,month_before
+Rudy Gay,SAS,San Antonio Spurs,108,109.7,-1.7,month_before
+Rudy Gobert,UTA,Utah Jazz,108.8,114.2,-5.4,month_before
+Rui Hachimura,WAS,Washington Wizards,112,110.1,1.9,month_before
+Russell Westbrook,HOU,Houston Rockets,110.5,107.6,2.9,month_before
+Serge Ibaka,TOR,Toronto Raptors,111.9,97.4,14.5,month_before
+Seth Curry,DAL,Dallas Mavericks,115.6,104.5,11.1,month_before
+Shabazz Napier,WAS,Washington Wizards,112.3,112.8,-0.5,month_before
+Shai Gilgeous-Alexander,OKC,Oklahoma City Thunder,114.1,112.3,1.8,month_before
+Steven Adams,OKC,Oklahoma City Thunder,112,106.1,5.9,month_before
+T.J. Warren,IND,Indiana Pacers,105.8,106.3,-0.4,month_before
+Terrance Ferguson,OKC,Oklahoma City Thunder,98.9,111.4,-12.4,month_before
+Thomas Bryant,WAS,Washington Wizards,110.1,104.8,5.3,month_before
+Tim Hardaway Jr.,DAL,Dallas Mavericks,113,105.7,7.3,month_before
+Tobias Harris,PHI,Philadelphia 76ers,116.7,114.9,1.8,month_before
+Tony Bradley,UTA,Utah Jazz,123.1,107.9,15.2,month_before
+Torrey Craig,DEN,Denver Nuggets,100.7,118.6,-17.9,month_before
+Troy Brown Jr.,WAS,Washington Wizards,103.7,112.3,-8.6,month_before
+Victor Oladipo,IND,Indiana Pacers,109.4,99.5,9.9,month_before
+Wesley Matthews,MIL,Milwaukee Bucks,99.7,91.9,7.8,month_before
+Zion Williamson,NOP,New Orleans Pelicans,114.1,104.2,9.9,month_before
+Aaron Gordon,ORL,Orlando Magic,115.9,102.7,13.2,bubble_seeding
+Aaron Holiday,IND,Indiana Pacers,107.5,104,3.5,bubble_seeding
+Al Horford,PHI,Philadelphia 76ers,115.9,114.8,1.1,bubble_seeding
+Anthony Davis,LAL,Los Angeles Lakers,104.1,112.5,-8.4,bubble_seeding
+Bam Adebayo,MIA,Miami Heat,116.5,106.8,9.7,bubble_seeding
+Ben McLemore,HOU,Houston Rockets,100.5,107.7,-7.2,bubble_seeding
+Ben Simmons,PHI,Philadelphia 76ers,108.1,115.4,-7.3,bubble_seeding
+Bogdan Bogdanovic,SAC,Sacramento Kings,114.7,113.5,1.1,bubble_seeding
+Brandon Ingram,NOP,New Orleans Pelicans,102.2,113.8,-11.6,bubble_seeding
+Brook Lopez,MIL,Milwaukee Bucks,114.5,105.7,8.9,bubble_seeding
+Buddy Hield,SAC,Sacramento Kings,107.4,121.8,-14.5,bubble_seeding
+CJ McCollum,POR,Portland Trail Blazers,121.3,122.7,-1.3,bubble_seeding
+Caris LeVert,BKN,Brooklyn Nets,117.6,115.5,2.1,bubble_seeding
+Carmelo Anthony,POR,Portland Trail Blazers,118.1,115.9,2.3,bubble_seeding
+Chris Paul,OKC,Oklahoma City Thunder,110.3,101.9,8.4,bubble_seeding
+Damian Lillard,POR,Portland Trail Blazers,123.8,121.7,2.2,bubble_seeding
+Daniel Theis,BOS,Boston Celtics,105.5,103.4,2.1,bubble_seeding
+Danilo Gallinari,OKC,Oklahoma City Thunder,118.2,104.6,13.5,bubble_seeding
+Danny Green,LAL,Los Angeles Lakers,100,115.7,-15.7,bubble_seeding
+Danuel House Jr.,HOU,Houston Rockets,111.5,104.7,6.9,bubble_seeding
+Dario Saric,PHX,Phoenix Suns,114.9,110.9,4,bubble_seeding
+De'Aaron Fox,SAC,Sacramento Kings,109.8,120.8,-11,bubble_seeding
+DeMar DeRozan,SAS,San Antonio Spurs,116.8,111.5,5.3,bubble_seeding
+Deandre Ayton,PHX,Phoenix Suns,120.6,108.9,11.6,bubble_seeding
+Dejounte Murray,SAS,San Antonio Spurs,112.4,111.7,0.7,bubble_seeding
+Derrick Favors,NOP,New Orleans Pelicans,104.5,111.8,-7.3,bubble_seeding
+Derrick White,SAS,San Antonio Spurs,117.3,107.4,9.9,bubble_seeding
+Devin Booker,PHX,Phoenix Suns,124.9,109.4,15.4,bubble_seeding
+Dillon Brooks,MEM,Memphis Grizzlies,108.1,108.8,-0.7,bubble_seeding
+Donovan Mitchell,UTA,Utah Jazz,108.2,104.8,3.5,bubble_seeding
+Donte DiVincenzo,MIL,Milwaukee Bucks,107.1,108.9,-1.8,bubble_seeding
+Dorian Finney-Smith,DAL,Dallas Mavericks,115,112.7,2.3,bubble_seeding
+Duncan Robinson,MIA,Miami Heat,112.1,105.9,6.2,bubble_seeding
+Eric Bledsoe,MIL,Milwaukee Bucks,107.6,115,-7.4,bubble_seeding
+Evan Fournier,ORL,Orlando Magic,116.8,103.6,13.2,bubble_seeding
+Frank Kaminsky,PHX,Phoenix Suns,124.8,110,14.8,bubble_seeding
+Fred VanVleet,TOR,Toronto Raptors,102.2,100,2.2,bubble_seeding
+Garrett Temple,BKN,Brooklyn Nets,117.3,117.2,0.2,bubble_seeding
+Gary Trent Jr.,POR,Portland Trail Blazers,125.4,115.3,10.1,bubble_seeding
+Giannis Antetokounmpo,MIL,Milwaukee Bucks,115.5,107,8.5,bubble_seeding
+Glenn Robinson III,PHI,Philadelphia 76ers,113.8,118.2,-4.4,bubble_seeding
+Gordon Hayward,BOS,Boston Celtics,119.1,108,11.1,bubble_seeding
+Gorgui Dieng,MEM,Memphis Grizzlies,106,106.4,-0.4,bubble_seeding
+Harrison Barnes,SAC,Sacramento Kings,107.1,121,-13.9,bubble_seeding
+Hassan Whiteside,POR,Portland Trail Blazers,120.4,109.1,11.3,bubble_seeding
+Isaac Bonga,WAS,Washington Wizards,94,104.7,-10.7,bubble_seeding
+Ish Smith,WAS,Washington Wizards,102.9,109.9,-6.9,bubble_seeding
+Ivica Zubac,LAC,LA Clippers,119.7,104.2,15.5,bubble_seeding
+JJ Redick,NOP,New Orleans Pelicans,107,115.5,-8.5,bubble_seeding
+Ja Morant,MEM,Memphis Grizzlies,105.4,107.3,-1.8,bubble_seeding
+JaKarr Sampson,IND,Indiana Pacers,100,98.6,1.4,bubble_seeding
+JaVale McGee,LAL,Los Angeles Lakers,90.7,114.5,-23.8,bubble_seeding
+Jae Crowder,MIA,Miami Heat,110.1,105.8,4.3,bubble_seeding
+Jakob Poeltl,SAS,San Antonio Spurs,124.4,110.4,14.1,bubble_seeding
+Jamal Murray,DEN,Denver Nuggets,116.3,121.8,-5.5,bubble_seeding
+James Harden,HOU,Houston Rockets,115.3,108.1,7.3,bubble_seeding
+Jaren Jackson Jr.,MEM,Memphis Grizzlies,107.1,102.9,4.2,bubble_seeding
+Jarrett Allen,BKN,Brooklyn Nets,120,115.6,4.3,bubble_seeding
+Jaylen Brown,BOS,Boston Celtics,116.1,106.1,10,bubble_seeding
+Jayson Tatum,BOS,Boston Celtics,117.2,103.2,14,bubble_seeding
+Jerami Grant,DEN,Denver Nuggets,119.2,121.3,-2.1,bubble_seeding
+Jimmy Butler,MIA,Miami Heat,111.4,101.3,10.1,bubble_seeding
+Joe Harris,BKN,Brooklyn Nets,120.4,127.9,-7.5,bubble_seeding
+Joe Ingles,UTA,Utah Jazz,109.3,110.1,-0.9,bubble_seeding
+Joel Embiid,PHI,Philadelphia 76ers,113.8,106.3,7.5,bubble_seeding
+Jonas Valanciunas,MEM,Memphis Grizzlies,105.4,106.5,-1.1,bubble_seeding
+Jonathan Isaac,ORL,Orlando Magic,131.9,120.3,11.6,bubble_seeding
+Josh Richardson,PHI,Philadelphia 76ers,117.8,118.1,-0.2,bubble_seeding
+Jrue Holiday,NOP,New Orleans Pelicans,104.9,105.3,-0.4,bubble_seeding
+Jusuf Nurkic,POR,Portland Trail Blazers,121.5,122,-0.5,bubble_seeding
+Kawhi Leonard,LAC,LA Clippers,127,108.1,18.8,bubble_seeding
+Kemba Walker,BOS,Boston Celtics,107.1,104.1,2.9,bubble_seeding
+Kendrick Nunn,MIA,Miami Heat,95.2,112.4,-17.2,bubble_seeding
+Kentavious Caldwell-Pope,LAL,Los Angeles Lakers,90.9,109.2,-18.3,bubble_seeding
+Khem Birch,ORL,Orlando Magic,107.7,119.2,-11.5,bubble_seeding
+Khris Middleton,MIL,Milwaukee Bucks,112.1,111.5,0.6,bubble_seeding
+Kristaps Porzingis,DAL,Dallas Mavericks,119.1,124.6,-5.5,bubble_seeding
+Kyle Anderson,MEM,Memphis Grizzlies,109.2,105.5,3.7,bubble_seeding
+Kyle Lowry,TOR,Toronto Raptors,99.5,94.4,5.2,bubble_seeding
+Landry Shamet,LAC,LA Clippers,112.2,113,-0.8,bubble_seeding
+LeBron James,LAL,Los Angeles Lakers,101.3,110.1,-8.8,bubble_seeding
+Lonnie Walker IV,SAS,San Antonio Spurs,112.5,109.2,3.3,bubble_seeding
+Lonzo Ball,NOP,New Orleans Pelicans,104,115.6,-11.6,bubble_seeding
+Luguentz Dort,OKC,Oklahoma City Thunder,113.3,109.7,3.6,bubble_seeding
+Luka Doncic,DAL,Dallas Mavericks,114.6,115.5,-0.9,bubble_seeding
+Malcolm Brogdon,IND,Indiana Pacers,104.3,106,-1.8,bubble_seeding
+Marc Gasol,TOR,Toronto Raptors,99.7,91.8,7.9,bubble_seeding
+Marcus Morris Sr.,LAC,LA Clippers,129.7,109.2,20.5,bubble_seeding
+Marcus Smart,BOS,Boston Celtics,120.2,107,13.2,bubble_seeding
+Markelle Fultz,ORL,Orlando Magic,111.1,114.8,-3.7,bubble_seeding
+Markieff Morris,LAL,Los Angeles Lakers,96,106.3,-10.3,bubble_seeding
+Maxi Kleber,DAL,Dallas Mavericks,118.5,120.7,-2.2,bubble_seeding
+Meyers Leonard,MIA,Miami Heat,96,112.7,-16.7,bubble_seeding
+Mikal Bridges,PHX,Phoenix Suns,118.3,107.4,11,bubble_seeding
+Mike Conley,UTA,Utah Jazz,113,107.9,5.1,bubble_seeding
+Monte Morris,DEN,Denver Nuggets,116,120.4,-4.4,bubble_seeding
+Myles Turner,IND,Indiana Pacers,106.2,110.5,-4.3,bubble_seeding
+Nemanja Bjelica,SAC,Sacramento Kings,116,106.4,9.5,bubble_seeding
+Nikola Jokic,DEN,Denver Nuggets,118.1,119.4,-1.4,bubble_seeding
+Nikola Vucevic,ORL,Orlando Magic,114.9,104.4,10.4,bubble_seeding
+Norman Powell,TOR,Toronto Raptors,100.7,108.4,-7.7,bubble_seeding
+OG Anunoby,TOR,Toronto Raptors,101.9,90.6,11.3,bubble_seeding
+P.J. Tucker,HOU,Houston Rockets,109.5,106.7,2.8,bubble_seeding
+Pascal Siakam,TOR,Toronto Raptors,103.9,94.9,9,bubble_seeding
+Patrick Beverley,LAC,LA Clippers,128.3,102.2,26.1,bubble_seeding
+Paul George,LAC,LA Clippers,121.3,109.7,11.6,bubble_seeding
+Paul Millsap,DEN,Denver Nuggets,115.2,119.4,-4.2,bubble_seeding
+Richaun Holmes,SAC,Sacramento Kings,115.4,117.7,-2.2,bubble_seeding
+Ricky Rubio,PHX,Phoenix Suns,115.8,110.1,5.7,bubble_seeding
+Robert Covington,HOU,Houston Rockets,109.5,103.1,6.4,bubble_seeding
+Rodions Kurucs,BKN,Brooklyn Nets,112,111.1,0.9,bubble_seeding
+Royce O'Neale,UTA,Utah Jazz,106.5,103.2,3.2,bubble_seeding
+Rudy Gay,SAS,San Antonio Spurs,113,105.5,7.5,bubble_seeding
+Rudy Gobert,UTA,Utah Jazz,111,104.5,6.5,bubble_seeding
+Rui Hachimura,WAS,Washington Wizards,101,111,-10,bubble_seeding
+Russell Westbrook,HOU,Houston Rockets,109.5,113.3,-3.8,bubble_seeding
+Serge Ibaka,TOR,Toronto Raptors,97.9,111.2,-13.3,bubble_seeding
+Seth Curry,DAL,Dallas Mavericks,114.9,125.3,-10.4,bubble_seeding
+Shabazz Napier,WAS,Washington Wizards,97.9,113.4,-15.6,bubble_seeding
+Shai Gilgeous-Alexander,OKC,Oklahoma City Thunder,108.8,107.4,1.4,bubble_seeding
+Steven Adams,OKC,Oklahoma City Thunder,106.7,102,4.6,bubble_seeding
+T.J. Warren,IND,Indiana Pacers,117,102.6,14.3,bubble_seeding
+Terrance Ferguson,OKC,Oklahoma City Thunder,92.6,109.1,-16.6,bubble_seeding
+Thomas Bryant,WAS,Washington Wizards,104.8,110,-5.2,bubble_seeding
+Tim Hardaway Jr.,DAL,Dallas Mavericks,117.7,126,-8.3,bubble_seeding
+Tobias Harris,PHI,Philadelphia 76ers,116.7,112.3,4.5,bubble_seeding
+Tony Bradley,UTA,Utah Jazz,106.5,120.4,-13.9,bubble_seeding
+Torrey Craig,DEN,Denver Nuggets,115.9,122.7,-6.7,bubble_seeding
+Troy Brown Jr.,WAS,Washington Wizards,104.5,113.7,-9.2,bubble_seeding
+Tyler Johnson,BKN,Brooklyn Nets,116.2,115.3,0.9,bubble_seeding
+Victor Oladipo,IND,Indiana Pacers,107,109.1,-2.2,bubble_seeding
+Wesley Matthews,MIL,Milwaukee Bucks,119.7,105.2,14.5,bubble_seeding
+Zach Collins,POR,Portland Trail Blazers,125.9,122.5,3.4,bubble_seeding
+Zion Williamson,NOP,New Orleans Pelicans,103.6,128.4,-24.9,bubble_seeding
