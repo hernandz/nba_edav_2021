@@ -8,9 +8,19 @@
 	    <title>Scatterplot NBA</title>
 	    <script src="https://d3js.org/d3.v6.min.js"></script>
 	    <style>
-	      p, h1, h2, h3, label {
+	      body, p, h1, h2, h3, label {
 	        font-family: sans-serif;
 	      }
+
+	      button {
+			  border: none;
+			  color: white;
+			  padding: 15px 32px;
+			  text-align: center;
+			  text-decoration: none;
+			  display: inline-block;
+			  font-size: 16px;
+			}
 	    </style>
 	</head>
 
@@ -47,8 +57,8 @@
 	<div>
 		<div id = "scatterplot" style = "display: inline-block; vertical-align:top;"></div>
 		<div id = "player_details" style = "display: inline-block; vertical-align:top;">
-			<p><b><span id="player_name"></span></b></p>
-			<p>Last selected player stats:<p>
+			<p><b><span id="player_name"></br></span></b></p>
+			<p>Last selected player:<p>
 			<p>Offensive Rating: <span id="ortg"></span></p>
 			<p>Defensive Rating: <span id="drtg"></span></p>
 			<p>Net Rating: <span id="netrtg"></span></p>
@@ -58,7 +68,7 @@
 	<script type="text/javascript">
 
 		// set the dimensions and margins of the graph
-		var margin = {top: 10, right: 10, bottom: 30, left: 30};
+		var margin = {top: 10, right: 10, bottom: 60, left: 60};
 		    width = 550 - margin.left - margin.right;
 		    height = 500 - margin.top - margin.bottom;
 		    // append the svg object to the body of the page
@@ -68,7 +78,9 @@
 		        .attr("height", height + margin.top + margin.bottom)
 		      .append("g")
 		        .attr("transform",
-		              "translate(" + margin.left + "," + margin.top + ")");
+		              "translate(" + margin.left + "," + margin.top + ")")
+
+		      ;
 
 
 		var rowConverter = function (d) {
@@ -87,7 +99,7 @@
 	         netrtg_bubble_playoffs: +d.netrtg_bubble_playoffs
 		    };
 		}  
-
+		// Add X axis
 		var xAxis = d3.scaleLinear()
 		  .domain([135, 65])
 		  .range([0, width]);
@@ -96,17 +108,44 @@
 		  .attr("transform", "translate(0," + height + ")")
 		  .call(d3.axisBottom(xAxis));
 
+		svg.append("text")             
+     		.attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top + 30) + ")")
+	      .style("text-anchor", "middle")
+	      .text("Defensive Rating");
+
 		// Add Y axis
 		var yAxis = d3.scaleLinear()
 		  .domain([50, 150])
 		  .range([ height, 0]);
-		
+
 		svg.append("g")
 		  .call(d3.axisLeft(yAxis));
 
+		svg.append("text")
+		    .attr("transform", "rotate(-90)")
+		    .attr("y", 0 - margin.left)
+		    .attr("x",0 - (height / 2))
+		    .attr("dy", "1em")
+		    .style("text-anchor", "middle")
+		    .text("Offensive Rating");     
+
+
+
+
+		svg.append("text")
+		    .attr("transform", "rotate(-90)")
+		    .attr("y", 0 - margin.left)
+		    .attr("x",0 - (height / 2))
+		    .attr("dy", "1em")
+		    .style("text-anchor", "middle")
+		    .text("Offensive Rating");  
+
+
 		var display_choice = "month_before";
 		var selected_team = "BOS";
-		var currently_selected_player;
+		var currently_selected_player, hover_player;
 		//read in the CSV, append all dots, and initialize the first view -- BOS data
 		d3.csv("https://raw.githubusercontent.com/hernandz/nba_edav_2021/santos_questions/data/d3_data.csv", rowConverter)
 			.then(function(data) {
@@ -140,16 +179,45 @@
 							}
 						})
 				    .style("stroke-width", "2")
-				    .on("click", function (event, d) {
-				    	currently_selected_player = d3.select(this).data();
-				    	update_stats(currently_selected_player);
+
+					.on('mouseover', function () {
+						hover_player = d3.select(this);
+							d3.select(this)
+								.style("stroke", "rgb(22 55 113)");
+							update_stats(hover_player.data());
+					        //  svg.select(this).transition()
+					            //   .duration('50')
+					            //.attr('opacity', '.85');
+					          //Makes the new div appear on hover:
+					        //  div.transition()
+					         //      .duration(50)
+					          //     .style("opacity", 1);
+					     })
+					 .on("click", function () {
+				    	currently_selected_player = d3.select(this);
+				    	update_stats(currently_selected_player.data());
 
 				    	svg.selectAll("circle")
 							.style("stroke", "");
 
 						d3.select(this)
 							.style("stroke", "rgb(22 55 113)");
-						});
+						})
+					 .on('mouseout', function () {
+					 		if (currently_selected_player == undefined) {
+					 			d3.select("#player_name").text("");
+								d3.select("#ortg").text("");
+								d3.select("#drtg").text("");
+								d3.select("#netrtg").text("");
+								hover_player.style("stroke", "");
+							} else if (hover_player.data()[0] == currently_selected_player.data()[0]) {
+								update_stats(currently_selected_player.data());
+							} else {
+							    hover_player.style("stroke", "");
+								update_stats(currently_selected_player.data());
+
+							}	
+					     });
 			});
 
 
@@ -184,7 +252,7 @@
 			 			case "bubble_seeding":
 			 				return "#ff9800"; 
 			 			case "bubble_playoffs":
-			 				return "#ff9800"; 
+			 				return "#e91e63"; 
 			 		}	
 				})
 
@@ -223,21 +291,21 @@
 
 			switch(display_choice) {
 		 			case "month_before":
-		 				selected_player_object["ortg"] = selected_player[0]["ortg_month_before"];
-		 				selected_player_object["drtg"] = selected_player[0]["drtg_month_before"];  
-		 				selected_player_object["netrtg"] = selected_player[0]["netrtg_month_before"]; 
+		 				selected_player_object.ortg = selected_player[0].ortg_month_before;
+		 				selected_player_object.drtg = selected_player[0].drtg_month_before;  
+		 				selected_player_object.netrtg = selected_player[0].netrtg_month_before; 
 		 				break; 
 
 		 			case "bubble_seeding":
-		 				selected_player_object["ortg"] = selected_player[0]["ortg_bubble_seeding"];
-		 				selected_player_object["drtg"] = selected_player[0]["drtg_bubble_seeding"];  
-		 				selected_player_object["netrtg"] = selected_player[0]["netrtg_bubble_seeding"];
+		 				selected_player_object.ortg = selected_player[0].ortg_bubble_seeding;
+		 				selected_player_object.drtg = selected_player[0].drtg_bubble_seeding;  
+		 				selected_player_object.netrtg = selected_player[0].netrtg_bubble_seeding;
 		 				break;   			 			
 
 		 			case "bubble_playoffs":
-		 				selected_player_object["ortg"] = selected_player[0]["ortg_bubble_playoffs"];
-		 				selected_player_object["drtg"] = selected_player[0]["drtg_bubble_playoffs"];  
-		 				selected_player_object["netrtg"] = selected_player[0]["netrtg_bubble_playoffs"];  
+		 				selected_player_object.ortg = selected_player[0].ortg_bubble_playoffs;
+		 				selected_player_object.drtg = selected_player[0].drtg_bubble_playoffs;  
+		 				selected_player_object.netrtg = selected_player[0].netrtg_bubble_playoffs;  
 		 				break; 
 		 	}
 					  //PLAYER PROFILE	
@@ -250,13 +318,14 @@
 		
 	</script>
 
-	<button class = "time-period", id = "month_before"><p>Month before NBA shutdown</p></button>
-	<button class = "time-period", id = "bubble_seeding"><p>Bubble seeding games</p></button>
-	<button class = "time-period", id = "bubble_playoffs"><p>Bubble playoffs</p></button>
+
+	<button class = "time_period", id = "month_before", style = "background-color: #00bcd4"><p>Month before NBA shutdown</p></button>
+	<button class = "time_period", id = "bubble_seeding", style = "background-color: #ff9800"><p>Bubble seeding games</p></button>
+	<button class = "time_period", id = "bubble_playoffs", style = "background-color: #e91e63"><p>Bubble playoffs</p></button>
 
 	<script>
 		//change between pre and post covid
-	    d3.selectAll("button.time-period")
+	    d3.selectAll("button.time_period")
 	        .on("click", function () {
 		    	display_choice = d3.select(this).attr("id");
 		    	move(display_choice);
@@ -269,6 +338,10 @@
 				.on("change", function() {
 					selected_team = d3.select(this).node().value;
 					update_dots(selected_team);
+					//d3.select("#player_name").text("");
+					//d3.select("#ortg").text("");
+					//d3.select("#drtg").text("");
+					//d3.select("#netrtg").text("");
 				});
 
     </script>
