@@ -132,8 +132,8 @@ categoryDefine <- function(notes)
 for (i in pageNumbers)
 {
 url <- paste(c(commonUrl,i),collapse='')
-print(url)
 page <- read_html(url)
+print(url)
 content <- page %>%
   html_node('div.container') %>%
   html_node('table.datatable') %>%
@@ -148,7 +148,6 @@ df$Acquired<-sub(x,'',df$Acquired)
 allYearsdf<-rbind(allYearsdf,df)
 }
 
-allYearsdf
 ```
 
 ```{r}
@@ -243,6 +242,16 @@ injuryData_2017
 ```{r}
 vcd::mosaic(typeInjury ~ position1,spacing = vcd::spacing_equal(sp = unit(0, "lines")),labeling = vcd::labeling_border(rot_labels = c(90, -90, 0, 0),gp_labels = gpar(fontsize = 6),gp_varnames = gpar(fontsize = 14, fontface = 1),pos_labels = "center",just_labels = "center"),injuryData_2017,highlighting_fill = brewer.pal(n = 8, 'Blues'))
 ```
+```{r}
+testval <- chisq.test(table(injuryData_2017$typeInjury, injuryData_2017$position1))
+testval$observed
+```
+
+```{r}
+testval$expected
+```
+
+
 
 ```{r}
 ggplot(injuryData_2017)+

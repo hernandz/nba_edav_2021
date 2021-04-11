@@ -1,2 +1,108 @@
 # Data sources
+---
+title: "Data Sources"
+author: "Rahul Subramaniam, Santos Hernandez"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r, include=TRUE}
+SOLUTIONS <- FALSE
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = SOLUTIONS, 
+                      eval = SOLUTIONS, cache = FALSE)
+library(tidyverse)
+```
+
+
+Question :
+
+In the NBA, is injury related to position or player statistics in some way? Has this changed over time through certain eras of playstyle?
+
+```{r}
+# keep this chunk in your .Rmd file
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+
+The NBA tools are available as a part of the nbaStatR package. We install it using the devtools package offered by github.
+
+
+```{r}
+devtools::install_github("abresler/nbastatR",force = TRUE)
+```
+
+Showing the libraries
+
+```{r}
+library(nbastatR)
+library(future)
+plan(multiprocess) 
+```
+
+
+
+c) Sampole view of Data 
+```{r}
+game_logs(seasons = 2010:2019)
+```
+
+
+```{r}
+bref_injuries()
+```
+
+b) Read the page at the URL listed above and save it.
+
+c) Read in the page saved in part b) and create a data frame with the following columns: `State`, `Distributed`, `Administered`, `Percentage`. Display the first six rows of the data frame.
+
+d) Create a Cleveland dot plot showing the percentage of distributed vaccines that have been administered.
+```{r}
+
+#players_rotowire(players = c( "Jarrett Allen", "DeMarre Carroll", "Allen Crabbe"))
+playerData<-dictionary_bref_players()
+
+
+```
+
+e) Create a multiple Cleveland dot plot showing doses distributed in one color and doses administered in another for each state. Experiment with different sorting orders. Choose the one that you think works best and explain why.
+
+```{r}
+library(tibble)
+c<-bref_bios( players = c("De'Andre Hunter", "Mitch Richmond", "Michael Adams"),
+player_ids = NULL,
+assign_to_environment = TRUE)['dataTable']
+c
+```
+
+
+
+```{r}
+players_careers(players = c("Joe Harris", "Myles Turner", "Spencer Dinwiddie"),
+modes = c("Totals", "PerGame"))
+```
+
+
+### 3. Taxis
+
+Data: NYC yellow cab rides in June 2020, available here:  
+
+https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page
+
+It's a large file so you may work with a reasonably-sized random sample of the data (for example 10000 rows). If you remove outliers / impossibilities explain your logic.
+
+Draw four plots of `tip_amount` vs. `fare_amount` with the following variations:
+
+(a) Scatterplot with alpha blending
+
+(b) Scatterplot with alpha blending + density estimate contour lines
+
+(c) Hexagonal heatmap of bin counts
+
+(d) Square heatmap of bin counts 
+
+For all, adjust parameters to the levels that provide the best views of the data.
+
+(e) Describe noteworthy features of the data, using the "Movie ratings" example on page 82 (last page of Section 5.3) as a guide.  
+
 
