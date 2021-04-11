@@ -79,7 +79,6 @@
 		      .append("g")
 		        .attr("transform",
 		              "translate(" + margin.left + "," + margin.top + ")")
-
 		      ;
 
 
@@ -118,7 +117,7 @@
 		// Add Y axis
 		var yAxis = d3.scaleLinear()
 		  .domain([50, 150])
-		  .range([ height, 0]);
+		  .range([height, 0]);
 
 		svg.append("g")
 		  .call(d3.axisLeft(yAxis));
@@ -221,7 +220,7 @@
 			});
 
 
-		function move(display_choice) { 
+		function move_dots(display_choice) { 
 			svg.selectAll("circle")
 		   		.transition()
 		   		.duration(1000)
@@ -232,7 +231,11 @@
 			 			case "bubble_seeding":
 			 				return xAxis(d.drtg_bubble_seeding); 
 			 			case "bubble_playoffs":
-			 				return xAxis(d.drtg_bubble_playoffs); 
+			 				if(isNaN(d.drtg_bubble_playoffs)){
+			 					return width/2; 
+			 				} else {
+			 					return xAxis(d.drtg_bubble_playoffs); 
+			 				} 
 			 		}	
 			 	})
 				.attr("cy", function (d) { 
@@ -242,7 +245,11 @@
 			 			case "bubble_seeding":
 			 				return yAxis(d.ortg_bubble_seeding); 
 			 			case "bubble_playoffs":
-			 				return yAxis(d.ortg_bubble_playoffs); 
+			 				if(isNaN(d.ortg_bubble_playoffs)){
+			 					return -100; 
+			 				} else {
+			 					return yAxis(d.ortg_bubble_playoffs);
+			 				} 
 			 		}
 				})
 				.style("fill", function (d) {
@@ -256,7 +263,7 @@
 			 		}	
 				})
 
-			update_stats(currently_selected_player);						
+			update_stats(currently_selected_player.data());						
 		}
 
 
@@ -328,21 +335,17 @@
 	    d3.selectAll("button.time_period")
 	        .on("click", function () {
 		    	display_choice = d3.select(this).attr("id");
-		    	move(display_choice);
+		    	move_dots(display_choice);
 
 	    });
 
 
 	    //dropdown behavior
 		d3.selectAll("select")
-				.on("change", function() {
-					selected_team = d3.select(this).node().value;
-					update_dots(selected_team);
-					//d3.select("#player_name").text("");
-					//d3.select("#ortg").text("");
-					//d3.select("#drtg").text("");
-					//d3.select("#netrtg").text("");
-				});
+			.on("change", function() {
+				selected_team = d3.select(this).node().value;
+				update_dots(selected_team);
+			});
 
     </script>
 

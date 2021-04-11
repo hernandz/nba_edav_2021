@@ -52,7 +52,7 @@ bubble_teams <- bubble %>%
   left_join(teams)
   
 bubble_stats_long <- bind_rows(covid_season_month_before,
-                               covid_season,
+                               #covid_season,
                                bubble_seeding,
                                bubble_playoffs,
                                ) %>%
@@ -64,30 +64,45 @@ bubble_stats_long <- bind_rows(covid_season_month_before,
 
 bubble_stats_long %>% 
   filter(rating == "ortg",
-         df_type != "bubble_playoffs",
-         df_type != "all_before") %>% 
+         #df_type != "bubble_playoffs"
+         ) %>% 
   mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value, .desc = FALSE)) %>% 
   ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
-  geom_point() 
+  geom_point() +
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "bubble_seeding" = "#ff9800", 
+                              "bubble_playoffs" = "#e91e63"),
+                     name = "Time Period") +
+  xlab("Offensive Rating") + 
+  ylab(NULL)
 
 bubble_stats_long %>% 
   filter(rating == "drtg",
-         df_type != "bubble_playoffs",
-         df_type != "all_before") %>%
+         #df_type != "bubble_playoffs",
+         ) %>%
   mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value)) %>% 
   ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
   geom_point() +
-  scale_x_reverse()
+  scale_x_reverse() +
+  scale_color_manual(values=c("month_before" = "#00bcd4",
+                              "bubble_seeding" = "#ff9800", 
+                              "bubble_playoffs" = "#e91e63")) +
+  xlab("Defensive Rating") + 
+  ylab(NULL)
 
 bubble_stats_long %>% 
   filter(rating == "netrtg",
-         df_type != "bubble_playoffs",
-         df_type != "all_before") %>%
-  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value)) %>% 
+        # df_type != "bubble_playoffs",
+         ) %>%
+  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value, .desc = FALSE)) %>% 
   ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
   geom_point() +
-  scale_x_reverse()
-
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "bubble_seeding" = "#ff9800", 
+                              "bubble_playoffs" = "#e91e63")) +
+  xlab("Net Rating (Offensive - Defensive)") + 
+  ylab(NULL)
+ 
 bubble_stats_long %>% 
   filter(rating %in% c(
                         "pctAST",				
@@ -162,7 +177,7 @@ season_2019_playoffs <- teams_players_stats(seasons = 2019, measures = "Advanced
 
 
 season_19_long <- bind_rows(
-          season_2019_74_games,
+          #season_2019_74_games,
           season_2019_month_before,
           season_2019_last_8,
           season_2019_playoffs,
@@ -170,23 +185,41 @@ season_19_long <- bind_rows(
   pivot_longer(gp:paceE, names_to = "rating", values_to = "value")  
 
 season_19_long %>% 
-  filter(rating == "ortg",
-         df_type != "first_74") %>% 
+  filter(rating == "ortg") %>% 
   semi_join(bubble_teams, by = "nameTeam") %>% #only teams that were invited to bubble
   mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value, .desc = FALSE)) %>% 
   ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
-  geom_point() 
+  geom_point()  +
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "last_8" = "#ff9800", 
+                              "playoffs" = "#e91e63")) +
+  xlab("Offensive Rating") + 
+  ylab(NULL)
 
 season_19_long %>% 
-  filter(rating == "drtg",
-         df_type != "first_74") %>%
+  filter(rating == "drtg") %>%
   semi_join(bubble_teams, by = "nameTeam") %>% 
   mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value)) %>% 
   ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
   geom_point() +
-  scale_x_reverse()
+  scale_x_reverse() +  
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "last_8" = "#ff9800", 
+                              "playoffs" = "#e91e63")) +
+  xlab("Defensive Rating") + 
+  ylab(NULL)
 
-
+season_19_long %>% 
+  filter(rating == "netrtg") %>% 
+  semi_join(bubble_teams, by = "nameTeam") %>% #only teams that were invited to bubble
+  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value, .desc = FALSE)) %>% 
+  ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
+  geom_point()  +
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "last_8" = "#ff9800", 
+                              "playoffs" = "#e91e63")) +
+  xlab("Net Rating (Offensive - Defensive)") + 
+  ylab(NULL)
 
 
 season_19_long %>% 
@@ -203,6 +236,9 @@ season_19_long %>%
   ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
   geom_point() +
   scale_x_reverse()
+
+
+
 
 season_19_long %>% 
   filter(rating %in% c(
@@ -223,65 +259,6 @@ season_19_long %>%
 
 
 ```
-
-
-```{r}
-
-season_2017_2019 <- teams_players_stats(seasons = 2017:2019, measures = "Advanced", season_types =  c("Regular Season", "Playoffs"), types = "team", tables = "general", modes = "PerGame", "3-24-19")
-
-season_2017_2019_last_8 <- teams_players_stats(seasons = 2017:2019, measures = "Advanced", season_types =  c("Regular Season"), types = "team", tables = "general", modes = "PerGame", last_n_games = 8)
-
-
-reg_2018 <- season_2017_2019$dataTable[[2]] %>% 
-  mutate(df_type = "regular_season")
-reg_2018_last_8 <- season_2017_2019_last_8$dataTable[[2]] %>% 
-  mutate(df_type = "regular_season_last_8")
-playoffs_2018 <- season_2017_2019$dataTable[[5]] %>% 
-  mutate(df_type = "playoffs")
-
-reg_2017 <- season_2017_2019$dataTable[[1]] %>% 
-  mutate(df_type = "regular_season")
-reg_2017_last_8 <- season_2017_2019_last_8$dataTable[[3]] %>% 
-  mutate(df_type = "regular_season_last_8")
-playoffs_2017 <- season_2017_2019$dataTable[[4]] %>% 
-  mutate(df_type = "playoffs")
-
-
-
-#bind_rows(reg_2019,
-#          reg_2019_last_8,
-#          #playoffs_2019
-#          ) %>% 
-#  semi_join(playoffs_2019, by = "nameTeam") %>% 
-#  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "regular_season", ortg, .desc = FALSE)) %>% 
-#  ggplot(aes(y = ordered_teams, x = ortg, color = df_type)) + 
-#  geom_point()
-
-
-
-bind_rows(reg_2018,
-          reg_2018_last_8,
-          #playoffs_2018
-          ) %>% 
-  #semi_join(playoffs_2018, by = "nameTeam") %>% 
-  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "regular_season", netrtg, .desc = FALSE)) %>% 
-  ggplot(aes(y = ordered_teams, x = netrtg, color = df_type)) + 
-  geom_point()
-
-
-bind_rows(reg_2017,
-          reg_2017_last_8,
-          #playoffs_2018
-          ) %>% 
-  #semi_join(playoffs_2018, by = "nameTeam") %>% 
-  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "regular_season", netrtg, .desc = FALSE)) %>% 
-  ggplot(aes(y = ordered_teams, x = netrtg, color = df_type)) + 
-  geom_point()
-
-
-
-```
-
 
 
 
@@ -306,9 +283,9 @@ bubble_playoffs_players <- bubble_players  %>%
   filter(typeSeason == "Playoffs") %>% 
   mutate(df_type = "bubble_playoffs") 
 
-season_2019_players <- teams_players_stats(seasons = 2019, measures = "Advanced", types = "player", tables = "general", modes = "PerGame") %>% 
+season_2019_players_playoffs <- teams_players_stats(seasons = 2019, measures = "Advanced",  season_types = c("Playoffs"), types = "player", tables = "general", modes = "PerGame", starters_bench = list("Starters", "Bench")) %>% 
   unnest(dataTable) %>% 
-  mutate(df_type = "all_before")
+  mutate(df_type = "playoffs")
 
 season_2019_players_month_before <- teams_players_stats(seasons = 2019, measures = "Advanced", types = "player", tables = "general", modes = "PerGame", date_from = "2-23-19", date_to = "3-23-19") %>% 
   unnest(dataTable) %>% 
@@ -332,51 +309,27 @@ covid_players_fixed <- covid_players %>%
          date_reported = str_remove(date_reported, " \\(.+\\)"),
          date_reported = mdy(str_c(date_reported, " 2020")))
 
-bind_rows(#covid_season_players,
+bind_rows(
           covid_season_players_month_before,
-          bubble_seeding_players
+          bubble_seeding_players,
+          bubble_playoffs_players
           ) %>% 
-   # filter(namePlayer %in% c("Marcus Smart",
-   #                        "Rudy Gobert",
-   #                        "Nikola Jokic",
-   #                        "Landry Shamet",
-   #                        "Buddy Hield",
-   #                        "Russell Westbrook",
-   #                        #"Derrick Jones Jr.",
-   #                        "Eric Bledsoe",
-   #                        "Bam Adebayo",
-   #                        "Ivica Zubac",
-   #                        #"Donovan Mitchell",
-   #                        "Pat Connaughton",
-   #                        "Ricky Rubio",
-   #                        "Kendrick Nunn")) %>% 
   inner_join(covid_players_fixed, by = c("namePlayer" = "name")) %>% 
-  filter(!(namePlayer %in% c("Luc Mbah a Moute", "Jabari Parker"))) %>% 
-  mutate(ordered_names = fct_reorder(namePlayer, date_reported, .desc = FALSE)) %>% 
+  filter(!(namePlayer %in% c("Luc Mbah a Moute", "Jabari Parker"))) %>% #waived
+  mutate(ordered_names = fct_reorder(str_c(namePlayer, " ", date_reported), date_reported, .desc = FALSE)) %>% 
   ggplot(aes(x = ordered_names, y = netrtg, color = df_type)) + 
   geom_point(alpha = .7) + 
-  theme(axis.text.x = element_text(angle = 90))
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_color_manual(values=c("month_before" = "#00bcd4",
+                              "bubble_seeding" = "#ff9800", 
+                              "bubble_playoffs" = "#e91e63"))
 
 #mo bamba hurt at end of season
-bind_rows(#season_2019_players, 
+bind_rows(
           season_2019_players_month_before,
-          season_2019_players_last_8
+          season_2019_players_last_8,
+          season_2019_players_playoffs
           ) %>% 
-  #  filter(namePlayer %in% c(
-  #                        #"Marcus Smart",
-  #                        "Rudy Gobert",
-  #                        #"Nikola Jokic",
-  #                        #"Landry Shamet",
-  #                        "Buddy Hield",
-  #                        "Russell Westbrook",
-  #                        #"Derrick Jones Jr.",
-  #                        #"Eric Bledsoe",
-  #                        "Bam Adebayo",
-  #                        "Ivica Zubac",
-  #                        #"Donovan Mitchell",
-  #                        "Pat Connaughton",
-  #                        "Ricky Rubio",
-  #                        "Kendrick Nunn")) %>% 
   inner_join(covid_players_fixed, by = c("namePlayer" = "name")) %>% 
   semi_join(bind_rows(covid_season_players_month_before,
                       bubble_seeding_players),
@@ -385,7 +338,10 @@ bind_rows(#season_2019_players,
   mutate(ordered_names = fct_reorder(namePlayer, date_reported, .desc = FALSE)) %>% 
   ggplot(aes(x = ordered_names, y = netrtg, color = df_type)) + 
   geom_point(alpha = .7) + 
-  theme(axis.text.x = element_text(angle = 90))
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "last_8" = "#ff9800", 
+                              "playoffs" = "#e91e63")) 
 
 
 
@@ -437,4 +393,67 @@ bubble_stats_long %>%
   group_by(rating) %>% 
   summarize()
 ```
+
+
+
+#
+#```{r}
+#
+#season_2017_2019 <- teams_players_stats(seasons = 2017:2019, measures = "Advanced", season_types =  c("Regular Season", "Playoffs"), types = "team", tables = "general", modes = "PerGame", "3-24-19")
+#
+#season_2017_2019_last_8 <- teams_players_stats(seasons = 2017:2019, measures = "Advanced", season_types =  c("Regular Season"), types = "team", tables = "general", modes = "PerGame", last_n_games = 8)
+#
+#
+#reg_2018 <- season_2017_2019$dataTable[[2]] %>% 
+#  mutate(df_type = "regular_season")
+#reg_2018_last_8 <- season_2017_2019_last_8$dataTable[[2]] %>% 
+#  mutate(df_type = "regular_season_last_8")
+#playoffs_2018 <- season_2017_2019$dataTable[[5]] %>% 
+#  mutate(df_type = "playoffs")
+#
+#reg_2017 <- season_2017_2019$dataTable[[1]] %>% 
+#  mutate(df_type = "regular_season")
+#reg_2017_last_8 <- season_2017_2019_last_8$dataTable[[3]] %>% 
+#  mutate(df_type = "regular_season_last_8")
+#playoffs_2017 <- season_2017_2019$dataTable[[4]] %>% 
+#  mutate(df_type = "playoffs")
+#
+#
+#
+##bind_rows(reg_2019,
+##          reg_2019_last_8,
+##          #playoffs_2019
+##          ) %>% 
+##  semi_join(playoffs_2019, by = "nameTeam") %>% 
+##  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "regular_season", ortg, .desc = FALSE)) %>% 
+##  ggplot(aes(y = ordered_teams, x = ortg, color = df_type)) + 
+##  geom_point()
+#
+#
+#
+#bind_rows(reg_2018,
+#          reg_2018_last_8,
+#          #playoffs_2018
+#          ) %>% 
+#  #semi_join(playoffs_2018, by = "nameTeam") %>% 
+#  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "regular_season", netrtg, .desc = FALSE)) %>% 
+#  ggplot(aes(y = ordered_teams, x = netrtg, color = df_type)) + 
+#  geom_point()
+#
+#
+#bind_rows(reg_2017,
+#          reg_2017_last_8,
+#          #playoffs_2018
+#          ) %>% 
+#  #semi_join(playoffs_2018, by = "nameTeam") %>% 
+#  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "regular_season", netrtg, .desc = FALSE)) %>% 
+#  ggplot(aes(y = ordered_teams, x = netrtg, color = df_type)) + 
+#  geom_point()
+#
+#
+#
+#```
+
+
+
 
