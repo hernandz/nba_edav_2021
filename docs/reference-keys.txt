@@ -1,0 +1,15 @@
+introduction
+data-sources
+data-transformation
+missing-values
+results
+interactive-component
+conclusion
+game-statistics
+player-positions-and-injuries
+issues
+covid-cases
+game-statistics-1
+covid-cases-1
+injuries
+player-positions

@@ -262,7 +262,19 @@ season_19_long %>%
 
 
 
-```{r}
+```{r fig.width = 8}
+
+covid_players <- read_html("https://www.slamonline.com/nba/nba-coronavirus-covid-list/") %>% 
+  html_element(css = ".wp-block-table") %>% 
+  html_table(header = TRUE)
+
+covid_players_fixed <- covid_players %>% 
+  rename(name = "Player",
+         date_reported = "Reported") %>% 
+  mutate(team_abb = str_sub(name, -4, -2),
+         name = str_remove(name, " \\(.+\\)"),
+         date_reported = str_remove(date_reported, " \\(.+\\)"),
+         date_reported = mdy(str_c(date_reported, " 2020")))
 
 covid_season_players <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "player", tables = "general", modes = "PerGame", date_from = "10-22-19", date_to = "3-11-20") %>% 
   unnest(dataTable) %>% 
@@ -283,7 +295,7 @@ bubble_playoffs_players <- bubble_players  %>%
   filter(typeSeason == "Playoffs") %>% 
   mutate(df_type = "bubble_playoffs") 
 
-season_2019_players_playoffs <- teams_players_stats(seasons = 2019, measures = "Advanced",  season_types = c("Playoffs"), types = "player", tables = "general", modes = "PerGame", starters_bench = list("Starters", "Bench")) %>% 
+season_2019_players_playoffs <- teams_players_stats(seasons = 2019, measures = "Advanced",  season_types = c("Playoffs"), types = "player", tables = "general", modes = "PerGame") %>% 
   unnest(dataTable) %>% 
   mutate(df_type = "playoffs")
 
@@ -297,26 +309,16 @@ season_2019_players_last_8 <- teams_players_stats(seasons = 2019, measures = "Ad
   mutate(df_type = "last_8") 
 
 
-covid_players <- read_html("https://www.slamonline.com/nba/nba-coronavirus-covid-list/") %>% 
-  html_element(css = ".wp-block-table") %>% 
-  html_table(header = TRUE)
-
-covid_players_fixed <- covid_players %>% 
-  rename(name = "Player",
-         date_reported = "Reported") %>% 
-  mutate(team_abb = str_sub(name, -4, -2),
-         name = str_remove(name, " \\(.+\\)"),
-         date_reported = str_remove(date_reported, " \\(.+\\)"),
-         date_reported = mdy(str_c(date_reported, " 2020")))
-
-bind_rows(
+bubble_season_combined <- bind_rows(
           covid_season_players_month_before,
           bubble_seeding_players,
           bubble_playoffs_players
-          ) %>% 
-  inner_join(covid_players_fixed, by = c("namePlayer" = "name")) %>% 
-  filter(!(namePlayer %in% c("Luc Mbah a Moute", "Jabari Parker"))) %>% #waived
-  mutate(ordered_names = fct_reorder(str_c(namePlayer, " ", date_reported), date_reported, .desc = FALSE)) %>% 
+          )
+
+covid_players_fixed %>% 
+  left_join(bubble_season_combined, by = c("name" = "namePlayer")) %>% 
+  filter(!(name %in% c("Luc Mbah a Moute", "Jabari Parker"))) %>% #waived
+  mutate(ordered_names = fct_reorder(name, date_reported, .desc = FALSE)) %>% 
   ggplot(aes(x = ordered_names, y = netrtg, color = df_type)) + 
   geom_point(alpha = .7) + 
   theme(axis.text.x = element_text(angle = 90)) +
@@ -324,18 +326,20 @@ bind_rows(
                               "bubble_seeding" = "#ff9800", 
                               "bubble_playoffs" = "#e91e63"))
 
-#mo bamba hurt at end of season
-bind_rows(
+season_2019_combined <- bind_rows(
           season_2019_players_month_before,
           season_2019_players_last_8,
           season_2019_players_playoffs
-          ) %>% 
-  inner_join(covid_players_fixed, by = c("namePlayer" = "name")) %>% 
-  semi_join(bind_rows(covid_season_players_month_before,
-                      bubble_seeding_players),
-            by = "namePlayer") %>% 
-  filter(!(namePlayer %in% c("Luc Mbah a Moute", "Jabari Parker")))  %>% 
-  mutate(ordered_names = fct_reorder(namePlayer, date_reported, .desc = FALSE)) %>% 
+          ) 
+
+
+covid_players_fixed %>% 
+  left_join(season_2019_combined, by = c("name" = "namePlayer")) %>% 
+ # semi_join(bind_rows(covid_season_players_month_before,
+ #                     bubble_seeding_players),
+ #           by = "namePlayer") %>% 
+  filter(!(name %in% c("Luc Mbah a Moute", "Jabari Parker")))  %>% 
+  mutate(ordered_names = fct_reorder(name, date_reported, .desc = FALSE)) %>% 
   ggplot(aes(x = ordered_names, y = netrtg, color = df_type)) + 
   geom_point(alpha = .7) + 
   theme(axis.text.x = element_text(angle = 90)) +
@@ -358,7 +362,7 @@ top_guys_bubble <- starters %>%
   semi_join(bubble_seeding_players, by = "namePlayer") %>% 
   semi_join(covid_season_players_month_before, by = "namePlayer") %>% 
   group_by(slugTeam) %>% 
-  slice_max(gp, n = 6)
+  slice_max(gp, n = 7)
 
 test <-  bubble_seeding_players %>% 
   semi_join(covid_season_players_month_before, by = "namePlayer") %>% 
@@ -386,12 +390,47 @@ d3_data <- covid_season_players_month_before %>%
          ) %>% 
   pivot_wider(names_from = "df_type", values_from = c("ortg", "drtg", "netrtg"))
  
+
+  
+covid_season_players_month_before %>% 
+  bind_rows(bubble_seeding_players) %>% 
+  bind_rows(bubble_playoffs_players) %>% 
+  semi_join(top_guys_bubble, by = "namePlayer") %>% 
+  left_join(bubble_teams, by = "slugTeam") %>% 
+  select(name = "namePlayer",
+         team_abb = "slugTeam",
+         team_name = "nameTeam",
+         ortg,
+         drtg,
+         netrtg,
+         df_type
+         ) %>% 
+  ggplot(mapping = aes(x = drtg, y = ortg, color = df_type)) +
+  geom_point() +
+  scale_x_reverse()
+
+
+
 d3_data %>%
   write_csv("data/d3_data.csv")
 
 bubble_stats_long %>% 
   group_by(rating) %>% 
   summarize()
+
+
+
+df <- game_logs(seasons = 2019, result_types = c("team"))
+test <- box_scores(
+  game_ids = 21800001,
+  league = "NBA",
+  box_score_types = "Advanced",
+  result_types = "team",
+  join_data = TRUE,
+  assign_to_environment = TRUE,
+  return_message = TRUE
+)
+
 ```
 
 

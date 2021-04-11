@@ -1,1 +1,68 @@
 # Data transformation
+
+## Game statistics
+
+When using the NBA stats R package, requested data comes as a nested dataframe. 
+Each row has data for a single season, with either regular season or playoff data. 
+So if you requested 2018-19 and 2019-2020 data for the regular season and playoffs, 
+4 rows would be returned. A column at the end has the actual game stats dataframes,
+so these must be unnested.
+```{r eval = FALSE, echo = TRUE}
+covid_season_month_before <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "team", tables = "general", modes = "PerGame", date_from = "2-11-20", date_to = "3-11-20") %>% 
+  unnest(dataTable) %>% 
+  mutate(df_type = "month_before")
+
+bubble <- teams_players_stats(seasons = 2020, measures = "Advanced",  types = "team", season_types = c("Regular Season", "Playoffs"), tables = "general", modes = "PerGame", date_from = "7-29-20", date_to = "10-11-20") %>% 
+  unnest(dataTable) 
+```
+
+We split the time periods that we wanted to compare into separate dataframes and added a new column, 
+`df_type`, to distinguish them.
+```{r eval = FALSE, echo = TRUE}
+bubble_seeding <- bubble %>% 
+  filter(typeSeason == "Regular Season") %>% 
+  mutate(df_type = "bubble_seeding") 
+
+bubble_playoffs <- bubble %>% 
+  filter(typeSeason == "Playoffs") %>% 
+  mutate(df_type = "bubble_playoffs")   
+```
+
+Finally, we made the data long for it to work with ggplot. The data when requested comes wide, 
+with a column for each statistic.
+```{r eval = FALSE, echo = TRUE}
+bubble_stats_long <- bind_rows(covid_season_month_before,
+                               bubble_seeding,
+                               bubble_playoffs,) %>%
+  select(nameTeam:paceE,
+         df_type,
+         -contains("rank")) %>% #drop some stats we're not interested in
+  pivot_longer(gp:paceE, names_to = "rating", values_to = "value") %>%
+  semi_join(bubble_teams, by = "nameTeam") #only teams that were invited to bubble
+```
+
+The same process was used for both team and player data because they come in the same form.
+
+### COVID cases
+
+Some additional steps were taken to integrate the COVID case data. The table from SLAM was 
+crawled with `rvest` and cleaned slightly to be able to join onto the player stats. Furthermore, 
+the dates were converted into date objects so that they would display in order on the x-axis.
+```{r eval = FALSE, echo = TRUE}
+covid_players <- read_html("https://www.slamonline.com/nba/nba-coronavirus-covid-list/") %>% 
+  html_element(css = ".wp-block-table") %>% 
+  html_table(header = TRUE)
+
+covid_players_fixed <- covid_players %>% 
+  rename(name = "Player",
+         date_reported = "Reported") %>% 
+  mutate(team_abb = str_sub(name, -4, -2),
+         name = str_remove(name, " \\(.+\\)"),
+         date_reported = str_remove(date_reported, " \\(.+\\)"),
+         date_reported = mdy(str_c(date_reported, " 2020")))
+
+```
+
+## Injuries
+
+## Player positions
