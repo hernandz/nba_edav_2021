@@ -417,6 +417,7 @@ top_guys_bubble %>%
 
 d3_data <- covid_season_players_month_before %>% 
   bind_rows(bubble_seeding_players) %>% 
+  bind_rows(bubble_playoffs_players) %>% 
   semi_join(top_guys_bubble, by = "namePlayer") %>% 
   left_join(bubble_teams, by = "slugTeam") %>% 
   select(name = "namePlayer",
@@ -432,6 +433,8 @@ d3_data <- covid_season_players_month_before %>%
 d3_data %>%
   write_csv("data/d3_data.csv")
 
-
+bubble_stats_long %>% 
+  group_by(rating) %>% 
+  summarize()
 ```
 
