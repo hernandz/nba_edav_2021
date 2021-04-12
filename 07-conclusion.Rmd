@@ -1,3 +1,23 @@
 # Conclusion
 
 ## COVID
+
+We were surprised to see that there was not a strong trend in change between pre- and post-COVID 
+games. It looked like there was a slight decrease in defensive, and therefore overall performances. But, 
+when compared the control data from the year before, we felt less confident there was a strong effect. 
+Furthermore, the sample size was very small for each time period -- any differences could just be a fluke. 
+But, the data for players that contracted COVID was somewhat notable. Just looking at the graph led us to 
+look into what happened to Mo Bamba after such a dramatic drop in performance, which revealed that he 
+has been struggling with long-term COVID symptoms. It might be worth further investigation as 
+he continues to play more games, also looking into other athletes dealing with long-term effects of COVID. 
+Some players got left out of the analysis as they opted out of the bubble _because_ of severe 
+COVID symptoms. These players might be worth a closer look along with Mo Bamba to find more evidence of 
+COVID on athletic performance.
+
+The graphs also would have benefited from some side-by-side facets along the type of rating. However, because defensive ratings 
+are measured differently, the x-axis needed to be flipped. Apparently, 
+it is a common complaint in the R community that there is no easy way to change the scale of individual facets. 
+
+## Kobe
+
+## Injuries
