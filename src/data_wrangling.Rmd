@@ -417,20 +417,6 @@ d3_data %>%
 bubble_stats_long %>% 
   group_by(rating) %>% 
   summarize()
-
-
-
-df <- game_logs(seasons = 2019, result_types = c("team"))
-test <- box_scores(
-  game_ids = 21800001,
-  league = "NBA",
-  box_score_types = "Advanced",
-  result_types = "team",
-  join_data = TRUE,
-  assign_to_environment = TRUE,
-  return_message = TRUE
-)
-
 ```
 
 

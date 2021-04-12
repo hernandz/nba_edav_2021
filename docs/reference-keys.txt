@@ -14,3 +14,9 @@ covid-cases-1
 injuries
 player-positions
 why-basketball
+covid
+approach
+offense
+section
+defense
+overall
