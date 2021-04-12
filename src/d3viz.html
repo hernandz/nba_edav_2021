@@ -29,8 +29,8 @@
 		<label for="teams">Displayed team:</label>
 
 		<select name="teams" id="teams">
-			<option value="ALL">Show All</option>
-			<option value="BOS" selected="">Boston Celtics</option>
+			<option value="ALL" selected="">Show All</option>
+			<option value="BOS">Boston Celtics</option>
 			<option value="BKN">Brooklyn Nets</option>
 			<option value="DAL">Dallas Mavericks</option>
 			<option value="DEN">Denver Nuggets</option>
@@ -57,8 +57,8 @@
 	<div>
 		<div id = "scatterplot" style = "display: inline-block; vertical-align:top;"></div>
 		<div id = "player_details" style = "display: inline-block; vertical-align:top;">
-			<p><b><span id="player_name"></br></span></b></p>
 			<p>Last selected player:<p>
+			<p><b><span id="player_name">Click a dot to select a player</br></span></b></p>
 			<p>Offensive Rating: <span id="ortg"></span></p>
 			<p>Defensive Rating: <span id="drtg"></span></p>
 			<p>Net Rating: <span id="netrtg"></span></p>
@@ -143,9 +143,9 @@
 
 
 		var display_choice = "month_before";
-		var selected_team = "BOS";
+		var selected_team = "ALL";
 		var currently_selected_player, hover_player;
-		//read in the CSV, append all dots, and initialize the first view -- BOS data
+		//read in the CSV, append all dots, and initialize the first view -- all team data
 		d3.csv("https://raw.githubusercontent.com/hernandz/nba_edav_2021/santos_questions/data/d3_data.csv", rowConverter)
 			.then(function(data) {
 			// stuff that requires the loaded data
@@ -163,20 +163,8 @@
 						})
 				    .attr("r", 5)
 				    .style("fill", "#00bcd4")
-				    .style("opacity", function(d){
-							if(d.team_abb == selected_team){
-								return ".8"; 
-							} else {
-								return "0";
-							}
-						})
-				    .style("display", function(d){
-							if(d.team_abb == selected_team || selected_team == "ALL"){
-								return ""; 
-							} else {
-								return "none";
-							}
-						})
+				    .style("opacity", ".8")
+				    .style("display", "")
 				    .style("stroke-width", "2")
 
 					.on('mouseover', function () {
@@ -204,7 +192,7 @@
 						})
 					 .on('mouseout', function () {
 					 		if (currently_selected_player == undefined) {
-					 			d3.select("#player_name").text("");
+					 			d3.select("#player_name").text("Click a dot to select a player");
 								d3.select("#ortg").text("");
 								d3.select("#drtg").text("");
 								d3.select("#netrtg").text("");
