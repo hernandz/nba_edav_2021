@@ -220,8 +220,18 @@ preprocessedInjuryData<-cbind(preprocessedInjuryData,df)
 ```
 
 ```{r}
-preprocessedInjuryData
+colSums(is.na(preprocessedInjuryData)) %>% sort(decreasing = TRUE)
 ```
+
+```{r}
+tidyData <- preprocessedInjuryData %>% rownames_to_column('id') %>% gather(key,value,-typeInjury)%>%
+  mutate(missing=ifelse(is.na(value),'yes','no'))
+ggplot(tidyData,aes(x=key,y=fct_rev(typeInjury),fill=missing))+geom_tile(color='white')+ggtitle('NAs for dataset')+coord_flip()
+#tidyData
+```
+
+
+
 
 ```{r}
 preprocessedInjuryData$position1[preprocessedInjuryData$position1 == 'Guard'] <- 'PointGuard'
@@ -255,15 +265,15 @@ testval$expected
 
 ```{r}
 ggplot(injuryData_2017)+
-  geom_bar(aes(x = typeInjury),)+
+  geom_bar(aes(x = typeInjury,),)+
   coord_flip() +
-  labs(x = "Injury",y="Number of players injured",title = "Injury by position")+facet_wrap(~position1,ncol=3)+
-  scale_fill_brewer(palette = 'PuBu')
+  labs(x = "Injury",y="Number of players injured",title = "Injury by position")+facet_wrap(~position1,ncol=3)+ggtitle('Injury By Kind Faceted Over Position')#+
+  #scale_fill_brewer(palette = brewer.pal(n = 7, 'Blues'))
 ```
 
 ```{r}
 linePlotDataFrame<-preprocessedInjuryData %>% group_by(position1,year) %>% summarize(n=n())
-linePlotDataFrame %>% ggplot( aes(x=year,y=n, group=position1, color=position1)) +geom_line() +geom_point()
+linePlotDataFrame %>% ggplot( aes(x=year,y=n, group=position1, color=position1)) +geom_line() +geom_point()+ggtitle('Number of Injuries over the years by playing position')
 ```
 
 ```{r}
@@ -276,6 +286,6 @@ treeMapDataFrame
 ```
 ```{r}
 
-treemap(treeMapDataFrame,index = c('year','typeInjury'),vSize = 'n',type = 'index')
+treemap(treeMapDataFrame,index = c('year','typeInjury'),vSize = 'n',type = 'index',title="Treemap for Injury Kinds over the years")
 ```
 
