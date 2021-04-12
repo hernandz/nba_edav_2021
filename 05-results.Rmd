@@ -1,1 +1,437 @@
 # Results
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(nbastatR)
+library(rvest)
+library(tidyverse)
+library(lubridate)
+```
+
+## COVID
+### Approach
+
+We decided to look at average game performance based on three distinct time periods: 
+a month of games before the bubble (10-13 games), regular season games in the bubble (8 games), and playoffs.
+
+If the playing during the COVID era changed the way the teams played, we could see change between these periods. 
+We decided to keep the playoffs separate, because team strategies can be different and generally, the stakes are much higher. 
+As previously explained, we focused on the Offensive/Defensive/Net ratings to evaluate the way they played.
+
+Note: not every team made it into the playoffs and are lacking that playoff data accordingly.
+```{r echo = FALSE, message = FALSE,  results='hide'}
+covid_season_month_before <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "team", tables = "general", modes = "PerGame", date_from = "2-11-20", date_to = "3-11-20") %>% 
+  unnest(dataTable) %>% 
+  mutate(df_type = "month_before")
+
+covid_season <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "team", tables = "general", modes = "PerGame", date_from = "10-22-19", date_to = "3-11-20") %>% 
+  unnest(dataTable) %>% 
+  mutate(df_type = "all_before")
+  
+bubble <- teams_players_stats(seasons = 2020, measures = "Advanced",  types = "team", season_types = c("Regular Season", "Playoffs"), tables = "general", modes = "PerGame", date_from = "7-29-20", date_to = "10-11-20") %>% 
+  unnest(dataTable) 
+
+bubble_seeding <- bubble %>% 
+  filter(typeSeason == "Regular Season") %>% 
+  mutate(df_type = "bubble_seeding") 
+
+bubble_playoffs <- bubble %>% 
+  filter(typeSeason == "Playoffs") %>% 
+  mutate(df_type = "bubble_playoffs")  
+
+teams <- nba_teams() %>% 
+  select(-nameTeam)
+
+bubble_teams <- bubble %>% 
+  group_by(nameTeam, idTeam) %>% 
+  summarize() %>% 
+  left_join(teams)
+  
+bubble_stats_long <- bind_rows(covid_season_month_before,
+                               #covid_season,
+                               bubble_seeding,
+                               bubble_playoffs,) %>%
+  select(nameTeam:pieRank,
+         df_type) %>%
+  pivot_longer(gp:pieRank, names_to = "rating", values_to = "value") %>%
+  semi_join(bubble_teams, by = "nameTeam") %>% #only teams that were invited to bubble 
+  mutate(df_type = factor(df_type, levels = c("month_before",
+                                              "bubble_seeding", 
+                                              "bubble_playoffs")))
+
+```
+  
+### Offense
+Comparing the offensive performances, some teams did a lot worse in the bubble seeding games than before the break. However, 
+just as many seemed to actually do _better_ in the bubble. We were pretty surprised to see that, 
+considering that it had been about 4 months of downtime. Between the seeding games and playoffs, there 
+were also big changes in either direction. The Trailblazers totally dropped off for post-season play, while 
+it looks like the Lakers were sandbagging in the seeding games (they ultimately won the championship).
+
+```{r echo = FALSE, message = FALSE,  results='hide'}
+bubble_stats_long %>% 
+  filter(rating == "ortg",
+         #df_type != "bubble_playoffs"
+         ) %>% 
+  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value, .desc = FALSE)) %>% 
+  ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
+  geom_point() +
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "bubble_seeding" = "#ff9800", 
+                              "bubble_playoffs" = "#e91e63"),
+                     labels = c("Month before COVID shutdown",
+                              "Bubble seeding games",
+                              "Bubble playoffs"),
+                     name = "Time Period") +
+  xlab("Offensive Rating") + 
+  ylab(NULL)
+```
+  
+### Defense
+However, looking at the defensive performance, teams mostly did slightly worse or about as well as they had been before the bubble. So, the bubble potentially had a slight negative effect on team defensive. Some teams actually did better than before -- the Suns and Thunder stood out with major improvement in their seeding games, but these swings were much smaller than the largest 
+negative swings.
+
+Note that a **lower** Defensive rating means **better** defensive play. The X-scale has been flipped 
+to allow for easier comparison with Offensive and Net ratings. 
+
+```{r echo = FALSE, message = FALSE,  results='hide'}
+bubble_stats_long %>% 
+  filter(rating == "drtg",
+         #df_type != "bubble_playoffs",
+         ) %>%
+  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value)) %>% 
+  ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
+  geom_point() +
+  scale_x_reverse() +
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "bubble_seeding" = "#ff9800", 
+                              "bubble_playoffs" = "#e91e63"),
+                     labels = c("Month before COVID shutdown",
+                              "Bubble seeding games",
+                              "Bubble playoffs"),
+                     name = "Time Period") +
+  xlab("Defensive Rating") + 
+  ylab(NULL)
+```
+  
+### Overall
+When combining the two to find the Net rating, the overall negative to neutral impact on 
+defense is enough to swing overall performance in that direction. It is easy to see 
+a large number of dots to the wall of the blue dots formed by ratings month before.
+In other words, overall performance for most teams looks worse or as good as before the bubble. There 
+does not appear to be any relationship in this change to performance before the bubble, i.e. teams were 
+impacted regardless of their previous rating.
+
+```{r echo = FALSE, message = FALSE,  results='hide'}
+bubble_stats_long %>% 
+  filter(rating == "netrtg",
+        # df_type != "bubble_playoffs",
+         ) %>%
+  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value, .desc = FALSE)) %>% 
+  ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
+  geom_point() +
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "bubble_seeding" = "#ff9800", 
+                              "bubble_playoffs" = "#e91e63"),
+                     labels = c("Month before COVID shutdown",
+                              "Bubble seeding games",
+                              "Bubble playoffs"),
+                     name = "Time Period") +
+  xlab("Net Rating (Offensive - Defensive)") + 
+  ylab(NULL)
+
+```
+  
+The slightly negative impact on defense/net rating was somewhat interesting, but we wanted to compare against a control. Perhaps a similar decrease in performance 
+could be seen at the end of a regular season. So, we made similar charts for the 2018-19 season with the same teams. 
+We chose three time periods that were similar to the bubble analysis: a month before the last 8 games, the last 8 games, and the playoffs.
+
+A similar amount of variance up and down can be seen in offense, and more in defense than the COVID season. The same decline in performance at the end of season can be see in 
+the net ratings, although the changes looks even smaller than the COVID season. So, maybe the COVID season did not have much of an effect at all on net player performance at a team level, 
+and the slight negative changes at the end of a season are more related to something else. Either way, the change in performance overall is not large and varies too much from team to team to 
+really suggest a strong relationship.
+```{r echo = FALSE, message = FALSE,  results='hide'}
+
+season_2019_month_before <- teams_players_stats(seasons = 2019, measures = "Advanced", season_types =  "Regular Season", types = "team", tables = "general", modes = "PerGame", date_from = "2-23-19", date_to = "3-23-19") %>% 
+  unnest(dataTable) %>% 
+  select(nameTeam:paceE,
+         -contains("rank")) %>% 
+  mutate(df_type = "month_before")
+
+
+season_2019_last_8 <- teams_players_stats(seasons = 2019, measures = "Advanced", season_types =  c("Regular Season"), types = "team", tables = "general", modes = "PerGame", last_n_games = 8) %>% 
+  unnest(dataTable) %>% 
+  select(nameTeam:paceE,
+         -contains("rank")) %>% 
+  mutate(df_type = "last_8") 
+
+season_2019_playoffs <- teams_players_stats(seasons = 2019, measures = "Advanced", season_types = "Regular Season", types = "team", tables = "general", modes = "PerGame", date_from = "10-10-18", date_to = "3-28-19") %>% 
+  unnest(dataTable) %>% 
+  select(nameTeam:paceE,
+         -contains("rank")) %>% 
+  mutate(df_type = "playoffs") 
+
+
+season_19_long <- bind_rows(
+          #season_2019_74_games,
+          season_2019_month_before,
+          season_2019_last_8,
+          season_2019_playoffs,
+          ) %>% 
+  pivot_longer(gp:paceE, names_to = "rating", values_to = "value")  %>% #only teams that were invited to bubble 
+  mutate(df_type = factor(df_type, levels = c("month_before",
+                                              "last_8", 
+                                              "playoffs")))
+```
+
+```{r}
+season_19_long %>% 
+  filter(rating == "ortg") %>% 
+  semi_join(bubble_teams, by = "nameTeam") %>% #only teams that were invited to bubble
+  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value, .desc = FALSE)) %>% 
+  ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
+  geom_point()  +
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "last_8" = "#ff9800", 
+                              "playoffs" = "#e91e63"),
+                     labels = c("Month before last 8",
+                              "Last 8 games",
+                              "Playoffs"),
+                     name = "Time Period") +
+  xlab("Offensive Rating") + 
+  ylab(NULL)
+
+season_19_long %>% 
+  filter(rating == "drtg") %>%
+  semi_join(bubble_teams, by = "nameTeam") %>% 
+  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value)) %>% 
+  ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
+  geom_point() +
+  scale_x_reverse() +  
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "last_8" = "#ff9800", 
+                              "playoffs" = "#e91e63"),
+                     labels = c("Month before last 8",
+                              "Last 8 games",
+                              "Playoffs"),
+                     name = "Time Period") +
+  xlab("Defensive Rating") + 
+  ylab(NULL)
+
+season_19_long %>% 
+  filter(rating == "netrtg") %>% 
+  semi_join(bubble_teams, by = "nameTeam") %>% #only teams that were invited to bubble
+  mutate(ordered_teams = fct_reorder2(nameTeam, df_type == "month_before", value, .desc = FALSE)) %>% 
+  ggplot(aes(y = ordered_teams, x = value, color = df_type)) + 
+  geom_point()  +
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "last_8" = "#ff9800", 
+                              "playoffs" = "#e91e63"),
+                     labels = c("Month before last 8",
+                              "Last 8 games",
+                              "Playoffs"),
+                     name = "Time Period") +
+  xlab("Net Rating (Offensive - Defensive)") + 
+  ylab(NULL)
+
+```
+### Players
+
+If the COVID bubble did not impact team performance, what about COVID itself? A number of players 
+were reported to have contracted the virus during the suspension of the season. We tried to see 
+if this had any kind of lasting impact, regardless of severity of symptoms.
+
+A quick search let us find the complete list of confirmed players that got COVID and 
+when it was reported that they did. We filtered player data based on these names and sorted them 
+based on when it was reported. We thought that given more time to recover, the greater chance that there 
+was no impact on their performance. On the left was the first reported case in March, on the right was the most 
+recent case in August, only two months from the start of the bubble.
+
+The chart shows that all but 5 players did worse than before the shutdown, and thus before they contracted COVID. 
+Furthermore, 3 of the players that outperformed after the restart were on the far left. Rudy Gobert, Donovan Mitchell, and Marcus Smart 
+were all reported to have gotten the virus in March, giving 7 months for recovery. On the far right, we can see 
+Mo Bamba take an absolute nosedive on his return. Looking a further into this, it seems that his symptoms
+[were long lasting](https://www.cbssports.com/nba/news/mo-bamba-still-dealing-with-covid-19-symptoms-despite-june-diagnosis-theres-no-timetable-on-his-return/), 
+even past the end of the season. Although the sample is small, this suggests that COVID has a generally negative effect even past the time that 
+players are cleared to play. Comparing the results to player performance from the previous year reinforces this, as there does not seem 
+to be any sort of end of season slump trend among the majority of players.
+
+```{r echo = FALSE, message = FALSE, results='hide'}
+covid_players <-
+  read_html("https://www.slamonline.com/nba/nba-coronavirus-covid-list/") %>%
+  html_element(css = ".wp-block-table") %>%
+  html_table(header = TRUE)
+
+covid_players_fixed <- covid_players %>%
+  rename(name = "Player",
+         date_reported = "Reported") %>%
+  mutate(
+    team_abb = str_sub(name, -4, -2),
+    name = str_remove(name, " \\(.+\\)"),
+    date_reported = str_remove(date_reported, " \\(.+\\)"),
+    date_reported = mdy(str_c(date_reported, " 2020"))
+  )
+
+covid_season_players_month_before <-
+  teams_players_stats(
+    seasons = 2020,
+    measures = "Advanced",
+    types = "player",
+    tables = "general",
+    modes = "PerGame",
+    date_from = "2-11-20",
+    date_to = "3-11-20"
+  ) %>%
+  unnest(dataTable) %>%
+  mutate(df_type = "month_before")
+
+bubble_players <-
+  teams_players_stats(
+    seasons = 2020,
+    measures = "Advanced",
+    types = "player",
+    season_types = c("Regular Season", "Playoffs"),
+    tables = "general",
+    modes = "PerGame",
+    date_from = "7-29-20",
+    date_to = "10-11-20"
+  ) %>%
+  unnest(dataTable)
+
+bubble_seeding_players <- bubble_players %>%
+  filter(typeSeason == "Regular Season") %>%
+  mutate(df_type = "bubble_seeding")
+
+bubble_playoffs_players <- bubble_players  %>%
+  filter(typeSeason == "Playoffs") %>%
+  mutate(df_type = "bubble_playoffs")
+
+bubble_season_players_combined <- bind_rows(
+  covid_season_players_month_before,
+  bubble_seeding_players,
+  bubble_playoffs_players
+)
+
+season_2019_players_month_before <-
+  teams_players_stats(
+    seasons = 2019,
+    measures = "Advanced",
+    types = "player",
+    tables = "general",
+    modes = "PerGame",
+    date_from = "2-23-19",
+    date_to = "3-23-19"
+  ) %>%
+  unnest(dataTable) %>%
+  mutate(df_type = "month_before")
+
+
+season_2019_players_last_8 <-
+  teams_players_stats(
+    seasons = 2019,
+    measures = "Advanced",
+    types = "player",
+    season_types = c("Regular Season"),
+    tables = "general",
+    modes = "PerGame",
+    last_n_games = 8
+  ) %>%
+  unnest(dataTable) %>%
+  mutate(df_type = "last_8")
+
+season_2019_players_playoffs <-
+  teams_players_stats(
+    seasons = 2019,
+    measures = "Advanced",
+    season_types = c("Playoffs"),
+    types = "player",
+    tables = "general",
+    modes = "PerGame"
+  ) %>%
+  unnest(dataTable) %>%
+  mutate(df_type = "playoffs")
+
+
+
+season_2019_players_combined <- bind_rows(
+  season_2019_players_month_before,
+  season_2019_players_last_8,
+  season_2019_players_playoffs
+)
+
+#===============================================================================
+```
+
+```{r echo = FALSE, message = FALSE,  results='hide', fig.width=9}
+covid_players_fixed %>%
+  left_join(bubble_season_players_combined, by = c("name" = "namePlayer")) %>%
+  semi_join(covid_season_players_month_before,  by = c("name" = "namePlayer")) %>%
+  semi_join(bubble_seeding_players,  by = c("name" = "namePlayer")) %>% 
+  filter(!(is.na(df_type)),
+        !(name %in% c("Luc Mbah a Moute",
+                      "Justin Anderson",
+                      "Jabari Parker")))  %>%
+  mutate(ordered_names = fct_reorder(name, date_reported, .desc = FALSE),
+         df_type = factor(df_type, levels = c("month_before",
+                                              "bubble_seeding", 
+                                              "bubble_playoffs"))
+         ) %>%
+  ggplot(aes(x = ordered_names, y = netrtg, color = df_type)) +
+  geom_point(alpha = .6) +
+  theme(text = element_text(size=16),
+        axis.text.x = element_text(angle = 90)) +
+  scale_color_manual(values = c("month_before" = "#00bcd4",
+                              "bubble_seeding" = "#ff9800", 
+                              "bubble_playoffs" = "#e91e63"),
+                     labels = c("Month before shutdown",
+                              "Bubble seeding games",
+                              "Bubble playoffs"),
+                     name = "Time Period") +
+  xlab("Players that contracted COVID") + 
+  ylab("Net Rating (Bubble 2019-20)")
+
+
+player_names_to_compare <- covid_players_fixed %>%
+  left_join(bubble_season_players_combined, by = c("name" = "namePlayer")) %>%
+  semi_join(covid_season_players_month_before,  by = c("name" = "namePlayer")) %>%
+  semi_join(bubble_seeding_players,  by = c("name" = "namePlayer")) %>% 
+  filter(!(is.na(df_type)),
+        !(name %in% c("Luc Mbah a Moute",
+                      "Justin Anderson",
+                      "Jabari Parker"))) 
+
+
+
+covid_players_fixed %>%
+  left_join(season_2019_players_combined, by = c("name" = "namePlayer")) %>%
+  #filter(!(is.na(df_type))) %>%
+  semi_join(player_names_to_compare, by = "name") %>% 
+  mutate(
+    ordered_names = fct_reorder(name, date_reported, .desc = FALSE),
+    df_type = factor(df_type, levels = c("month_before",
+                                         "last_8",
+                                         "playoffs"))
+  ) %>%
+  ggplot(aes(x = ordered_names, y = netrtg, color = df_type)) +
+  geom_point(alpha = .7) +
+  theme(text = element_text(size=16),
+        axis.text.x = element_text(angle = 90)) +
+  scale_color_manual(
+    values = c(
+      "month_before" = "#00bcd4",
+      "last_8" = "#ff9800",
+      "playoffs" = "#e91e63"
+    ),
+    labels = c("Month before last 8",
+               "Last 8 games",
+               "Playoffs"),
+    name = "Time Period"
+  ) +
+  xlab("Players that contracted COVID") + 
+  ylab("Net Rating (2018-19)")
+
+
+```
+  

@@ -1,1 +1,9 @@
 # Missing values
+
+Due to the nature of the package/website, NA's are never returned for game statistics. 
+If a player is missing entirely from a request, that means they did not play at all for the requested time period. 
+Any difference in the number of games used to calculate averages reflects the real world. 
+If a game of statistics are missing from an average, they did not play that game due to whatever reason. 
+For example, we noticed Kevin Durant missing data for the 19-20 season -- this was due to a 
+torn achilles sidelining him for the entire year.
+
