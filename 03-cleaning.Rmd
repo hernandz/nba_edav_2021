@@ -77,7 +77,7 @@ get the best and most notable players, we needed to look beyond ratings. First, 
 This already eliminates a lot of players -- only reasonably good players get to start. 
 Then, we took the top 6 ranks for each team by number of games started. 
 
-```{r}
+```{r eval = FALSE, echo = TRUE}
 starters <- teams_players_stats(seasons = 2020, types = "player", starters_bench = list("Starters")) %>% 
   unnest(dataTable) 
 
@@ -97,10 +97,8 @@ single svg element. This would allow us to access this data easily, letting us r
 Being d3 beginners, we were not sure of this approach. Maybe performance would have been better to 
 add/remove dots as needed rather than load them all and hide/show them? Or even split the csv into three, 
 one for each time period, loading as needed. Regardless, this approach worked!
-```{r}
-d3_data <- covid_season_players_month_before %>% 
-  bind_rows(bubble_seeding_players) %>% 
-  bind_rows(bubble_playoffs_players) %>% 
+```{r eval = FALSE, echo = TRUE}
+d3_data <- bubble_season_combined %>% 
   semi_join(top_guys_bubble, by = "namePlayer") %>% 
   left_join(bubble_teams, by = "slugTeam") %>% 
   select(name = "namePlayer",

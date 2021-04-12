@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 Data transformation | YOUR TITLE HERE</title>
-  <meta name="description" content="Chapter 3 Data transformation | YOUR TITLE HERE" />
+  <title>Chapter 3 Data transformation | COVID, Kobe, and Injury in the NBA</title>
+  <meta name="description" content="Chapter 3 Data transformation | COVID, Kobe, and Injury in the NBA" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 Data transformation | YOUR TITLE HERE" />
+  <meta property="og:title" content="Chapter 3 Data transformation | COVID, Kobe, and Injury in the NBA" />
   <meta property="og:type" content="book" />
   
   
@@ -16,12 +16,12 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 Data transformation | YOUR TITLE HERE" />
+  <meta name="twitter:title" content="Chapter 3 Data transformation | COVID, Kobe, and Injury in the NBA" />
   
   
   
 
-<meta name="author" content="YOUR NAMES HERE" />
+<meta name="author" content="Santos Hernandez and Rahul Subramaniam" />
 
 
 <meta name="date" content="2021-04-11" />
@@ -132,10 +132,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">SHORT TITLE HERE</a></li>
+<li><a href="./">NBA - EDAV</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#why-basketball"><i class="fa fa-check"></i><b>1.1</b> Why basketball?</a></li>
+</ul></li>
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#game-statistics"><i class="fa fa-check"></i><b>2.1</b> Game statistics</a>
@@ -153,9 +156,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#injuries"><i class="fa fa-check"></i><b>3.2</b> Injuries</a></li>
 <li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#player-positions"><i class="fa fa-check"></i><b>3.3</b> Player positions</a></li>
+<li class="chapter" data-level="3.4" data-path="data-transformation.html"><a href="data-transformation.html#d3"><i class="fa fa-check"></i><b>3.4</b> d3</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#covid"><i class="fa fa-check"></i><b>5.1</b> COVID</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#approach"><i class="fa fa-check"></i><b>5.1.1</b> Approach</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#offense"><i class="fa fa-check"></i><b>5.1.2</b> Offense</a></li>
+<li class="chapter" data-level="5.1.3" data-path="results.html"><a href="results.html#defense"><i class="fa fa-check"></i><b>5.1.3</b> Defense</a></li>
+<li class="chapter" data-level="5.1.4" data-path="results.html"><a href="results.html#overall"><i class="fa fa-check"></i><b>5.1.4</b> Overall</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -169,7 +182,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">YOUR TITLE HERE</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">COVID, Kobe, and Injury in the NBA</a>
           </h1>
         </div>
 
@@ -235,6 +248,45 @@ the dates were converted into date objects so that they would display in order o
 </div>
 <div id="player-positions" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Player positions</h2>
+</div>
+<div id="d3" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> d3</h2>
+<p>A small amount of tooling was required to use the NBAstatR data with d3. To make the amount of players more manageable, we
+pared down the total number of players in the dataset to just the big names on each team. There
+are a number of players that play only a few games each year and greatly skew their ranking data. So,
+get the best and most notable players, we needed to look beyond ratings. First, took data from the whole season for only <em>starters</em>.
+This already eliminates a lot of players – only reasonably good players get to start.
+Then, we took the top 6 ranks for each team by number of games started.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="data-transformation.html#cb5-1" aria-hidden="true" tabindex="-1"></a>starters <span class="ot">&lt;-</span> <span class="fu">teams_players_stats</span>(<span class="at">seasons =</span> <span class="dv">2020</span>, <span class="at">types =</span> <span class="st">&quot;player&quot;</span>, <span class="at">starters_bench =</span> <span class="fu">list</span>(<span class="st">&quot;Starters&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="data-transformation.html#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(dataTable) </span>
+<span id="cb5-3"><a href="data-transformation.html#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="data-transformation.html#cb5-4" aria-hidden="true" tabindex="-1"></a>top_guys_bubble <span class="ot">&lt;-</span> starters <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="data-transformation.html#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">semi_join</span>(bubble_seeding_players, <span class="at">by =</span> <span class="st">&quot;namePlayer&quot;</span>) <span class="sc">%&gt;%</span> <span class="co">#only return players with bubble data, some players opted out</span></span>
+<span id="cb5-6"><a href="data-transformation.html#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">semi_join</span>(covid_season_players_month_before, <span class="at">by =</span> <span class="st">&quot;namePlayer&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-7"><a href="data-transformation.html#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(slugTeam) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-8"><a href="data-transformation.html#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(gp, <span class="at">n =</span> <span class="dv">6</span>)</span></code></pre></div>
+<p>Once we found the list of players we wanted, we filtered our game data from these names.
+Then, we cut down the amount of game stats to just the ones we were interested in.
+Finally, we spread the data wide by time period so that data from each period would be associated with a
+single svg element. This would allow us to access this data easily, letting us read the data just once.</p>
+<p>Being d3 beginners, we were not sure of this approach. Maybe performance would have been better to
+add/remove dots as needed rather than load them all and hide/show them? Or even split the csv into three,
+one for each time period, loading as needed. Regardless, this approach worked!</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="data-transformation.html#cb6-1" aria-hidden="true" tabindex="-1"></a>d3_data <span class="ot">&lt;-</span> bubble_season_combined <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="data-transformation.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">semi_join</span>(top_guys_bubble, <span class="at">by =</span> <span class="st">&quot;namePlayer&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="data-transformation.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(bubble_teams, <span class="at">by =</span> <span class="st">&quot;slugTeam&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="data-transformation.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">name =</span> <span class="st">&quot;namePlayer&quot;</span>,</span>
+<span id="cb6-5"><a href="data-transformation.html#cb6-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">team_abb =</span> <span class="st">&quot;slugTeam&quot;</span>,</span>
+<span id="cb6-6"><a href="data-transformation.html#cb6-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">team_name =</span> <span class="st">&quot;nameTeam&quot;</span>,</span>
+<span id="cb6-7"><a href="data-transformation.html#cb6-7" aria-hidden="true" tabindex="-1"></a>         ortg,</span>
+<span id="cb6-8"><a href="data-transformation.html#cb6-8" aria-hidden="true" tabindex="-1"></a>         drtg,</span>
+<span id="cb6-9"><a href="data-transformation.html#cb6-9" aria-hidden="true" tabindex="-1"></a>         netrtg,</span>
+<span id="cb6-10"><a href="data-transformation.html#cb6-10" aria-hidden="true" tabindex="-1"></a>         df_type</span>
+<span id="cb6-11"><a href="data-transformation.html#cb6-11" aria-hidden="true" tabindex="-1"></a>         ) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-12"><a href="data-transformation.html#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">&quot;df_type&quot;</span>, <span class="at">values_from =</span> <span class="fu">c</span>(<span class="st">&quot;ortg&quot;</span>, <span class="st">&quot;drtg&quot;</span>, <span class="st">&quot;netrtg&quot;</span>))</span>
+<span id="cb6-13"><a href="data-transformation.html#cb6-13" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb6-14"><a href="data-transformation.html#cb6-14" aria-hidden="true" tabindex="-1"></a>d3_data <span class="sc">%&gt;%</span></span>
+<span id="cb6-15"><a href="data-transformation.html#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_csv</span>(<span class="st">&quot;data/d3_data.csv&quot;</span>)</span></code></pre></div>
 
 </div>
 </div>

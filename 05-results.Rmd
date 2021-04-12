@@ -7,6 +7,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(nbastatR)
 library(rvest)
 library(tidyverse)
+library(lubridate)
 ```
 
 ## COVID
@@ -183,8 +184,9 @@ season_19_long <- bind_rows(
   mutate(df_type = factor(df_type, levels = c("month_before",
                                               "last_8", 
                                               "playoffs")))
- 
+```
 
+```{r}
 season_19_long %>% 
   filter(rating == "ortg") %>% 
   semi_join(bubble_teams, by = "nameTeam") %>% #only teams that were invited to bubble
@@ -256,10 +258,7 @@ even past the end of the season. Although the sample is small, this suggests tha
 players are cleared to play. Comparing the results to player performance from the previous year reinforces this, as there does not seem 
 to be any sort of end of season slump trend among the majority of players.
 
-```{r echo = FALSE, message = FALSE,  results='hide'}
-
-
-
+```{r echo = FALSE, message = FALSE, results='hide'}
 covid_players <-
   read_html("https://www.slamonline.com/nba/nba-coronavirus-covid-list/") %>%
   html_element(css = ".wp-block-table") %>%
@@ -309,6 +308,12 @@ bubble_playoffs_players <- bubble_players  %>%
   filter(typeSeason == "Playoffs") %>%
   mutate(df_type = "bubble_playoffs")
 
+bubble_season_players_combined <- bind_rows(
+  covid_season_players_month_before,
+  bubble_seeding_players,
+  bubble_playoffs_players
+)
+
 season_2019_players_month_before <-
   teams_players_stats(
     seasons = 2019,
@@ -349,16 +354,17 @@ season_2019_players_playoffs <-
   mutate(df_type = "playoffs")
 
 
-bubble_season_players_combined <- bind_rows(
-  covid_season_players_month_before,
-  bubble_seeding_players,
-  bubble_playoffs_players
+
+season_2019_players_combined <- bind_rows(
+  season_2019_players_month_before,
+  season_2019_players_last_8,
+  season_2019_players_playoffs
 )
 
 #===============================================================================
 ```
 
-```{r}
+```{r echo = FALSE, message = FALSE,  results='hide', fig.width=9}
 covid_players_fixed %>%
   left_join(bubble_season_players_combined, by = c("name" = "namePlayer")) %>%
   semi_join(covid_season_players_month_before,  by = c("name" = "namePlayer")) %>%
@@ -374,16 +380,17 @@ covid_players_fixed %>%
          ) %>%
   ggplot(aes(x = ordered_names, y = netrtg, color = df_type)) +
   geom_point(alpha = .6) +
-  theme(axis.text.x = element_text(angle = 90)) +
+  theme(text = element_text(size=16),
+        axis.text.x = element_text(angle = 90)) +
   scale_color_manual(values = c("month_before" = "#00bcd4",
                               "bubble_seeding" = "#ff9800", 
                               "bubble_playoffs" = "#e91e63"),
-                     labels = c("Month before COVID shutdown",
+                     labels = c("Month before shutdown",
                               "Bubble seeding games",
                               "Bubble playoffs"),
                      name = "Time Period") +
   xlab("Players that contracted COVID") + 
-  ylab("Net Rating")
+  ylab("Net Rating (Bubble 2019-20)")
 
 
 player_names_to_compare <- covid_players_fixed %>%
@@ -396,16 +403,10 @@ player_names_to_compare <- covid_players_fixed %>%
                       "Jabari Parker"))) 
 
 
-season_2019_players_combined <- bind_rows(
-  season_2019_players_month_before,
-  season_2019_players_last_8,
-  season_2019_players_playoffs
-)
-
 
 covid_players_fixed %>%
   left_join(season_2019_players_combined, by = c("name" = "namePlayer")) %>%
-  filter(!(is.na(df_type))) %>%
+  #filter(!(is.na(df_type))) %>%
   semi_join(player_names_to_compare, by = "name") %>% 
   mutate(
     ordered_names = fct_reorder(name, date_reported, .desc = FALSE),
@@ -415,7 +416,8 @@ covid_players_fixed %>%
   ) %>%
   ggplot(aes(x = ordered_names, y = netrtg, color = df_type)) +
   geom_point(alpha = .7) +
-  theme(axis.text.x = element_text(angle = 90)) +
+  theme(text = element_text(size=16),
+        axis.text.x = element_text(angle = 90)) +
   scale_color_manual(
     values = c(
       "month_before" = "#00bcd4",

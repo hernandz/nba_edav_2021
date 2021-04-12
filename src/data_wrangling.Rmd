@@ -263,7 +263,6 @@ season_19_long %>%
 
 
 ```{r fig.width = 8}
-
 covid_players <- read_html("https://www.slamonline.com/nba/nba-coronavirus-covid-list/") %>% 
   html_element(css = ".wp-block-table") %>% 
   html_table(header = TRUE)
