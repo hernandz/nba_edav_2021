@@ -24,18 +24,19 @@ library(tidyverse)
 library(ggrepel)
 library(treemap)
 library(RColorBrewer)
-plan(multiprocess)
 ```
 
 ## COVID
 ### Approach
 
 We decided to look at average game performance based on three distinct time periods: 
-a month of games before the bubble (10-13 games), regular season games in the bubble (8 games), and playoffs.
+a month of games before the Bubble (10-13 games), regular season games in the Bubble (8 games), and playoffs.
 
 If the playing during the COVID era changed the way the teams played, we could see change between these periods. 
 We decided to keep the playoffs separate, because team strategies can be different and generally, the stakes are much higher. 
-As previously explained, we focused on the Offensive/Defensive/Net ratings to evaluate the way they played.
+As previously explained, we focused on the Offensive/Defensive/Net ratings to evaluate the way they played. A Cleveland dot plot 
+sorted by ratings before the Bubble could allows to easily see improvement or lag in performance. Dots on the left of the blue line of 
+dots would mean worse, to the right, better.
 
 Note: not every team made it into the playoffs and are lacking that playoff data accordingly.
 ```{r echo = FALSE, message = FALSE,  results='hide'}
@@ -82,8 +83,8 @@ bubble_stats_long
 ```
   
 ### Offense
-Comparing the offensive performances, some teams did a lot worse in the bubble seeding games than before the break. However, 
-just as many seemed to actually do _better_ in the bubble. We were pretty surprised to see that, 
+Comparing the offensive performances, some teams did a lot worse in the Bubble seeding games than before the break. However, 
+just as many seemed to actually do _better_ in the Bubble. We were pretty surprised to see that, 
 considering that it had been about 4 months of downtime. Between the seeding games and playoffs, there 
 were also big changes in either direction. The Trailblazers totally dropped off for post-season play, while 
 it looks like the Lakers were sandbagging in the seeding games (they ultimately won the championship).
@@ -104,11 +105,12 @@ bubble_stats_long %>%
                               "Bubble playoffs"),
                      name = "Time Period") +
   xlab("Offensive Rating") + 
-  ylab(NULL) + ggtitle('NBA team ratings before/during the 2020 COVID bubble - Offense')
+  ylab(NULL) + 
+  ggtitle('NBA team ratings before/during the 2020 COVID Bubble - Offense')
 ```
   
 ### Defense
-However, looking at the defensive performance, teams mostly did slightly worse or about as well as they had been before the bubble. So, the bubble potentially had a slight negative effect on team defensive. Some teams actually did better than before -- the Suns and Thunder stood out with major improvement in their seeding games, but these swings were much smaller than the largest 
+However, looking at the defensive performance, teams mostly did slightly worse or about as well as they had been before the bubble. So, the bubble potentially had a slight negative effect on team defense. Some teams actually did better than before -- the Suns and Thunder stood out with major improvement in their seeding games, but these swings were much smaller than the largest 
 negative swings.
 
 Note that a **lower** Defensive rating means **better** defensive play. The X-scale has been flipped 
@@ -131,15 +133,16 @@ bubble_stats_long %>%
                               "Bubble playoffs"),
                      name = "Time Period") +
   xlab("Defensive Rating") + 
-  ylab(NULL)+ ggtitle('NBA team ratings before/during the 2020 COVID bubble - Defense')
+  ylab(NULL) + 
+  ggtitle('NBA team ratings before/during the 2020 COVID Bubble - Defense')
 ```
   
 ### Overall
 When combining the two to find the Net rating, the overall negative to neutral impact on 
 defense is enough to swing overall performance in that direction. It is easy to see 
 a large number of dots to the wall of the blue dots formed by ratings month before.
-In other words, overall performance for most teams looks worse or as good as before the bubble. There 
-does not appear to be any relationship in this change to performance before the bubble, i.e. teams were 
+In other words, overall performance for most teams looks worse or as good as before the Bubble. There 
+does not appear to be any relationship in this change to performance before the Bubble, i.e. teams were 
 impacted regardless of their previous rating.
 
 ```{r echo = FALSE, message = FALSE,  results='hide'}
@@ -158,13 +161,14 @@ bubble_stats_long %>%
                               "Bubble playoffs"),
                      name = "Time Period") +
   xlab("Net Rating (Offensive - Defensive)") + 
-  ylab(NULL)+ ggtitle('NBA team ratings before/during the 2020 COVID bubble - Net')
+  ylab(NULL) +  
+  ggtitle('NBA team ratings before/during the 2020 COVID Bubble - Net')
 
 ```
   
 The slightly negative impact on defense/net rating was somewhat interesting, but we wanted to compare against a control. Perhaps a similar decrease in performance 
 could be seen at the end of a regular season. So, we made similar charts for the 2018-19 season with the same teams. 
-We chose three time periods that were similar to the bubble analysis: a month before the last 8 games, the last 8 games, and the playoffs.
+We chose three time periods that were similar to the Bubble analysis: a month before the last 8 games, the last 8 games, and the playoffs.
 
 A similar amount of variance up and down can be seen in offense, and more in defense than the COVID season. The same decline in performance at the end of season can be see in 
 the net ratings, although the changes looks even smaller than the COVID season. So, maybe the COVID season did not have much of an effect at all on net player performance at a team level, 
@@ -203,10 +207,9 @@ season_19_long <- bind_rows(
                                               "last_8", 
                                               "playoffs")))
 
-season_19_long
 ```
 
-```{r}
+```{r echo = FALSE, message = FALSE, results='hide'}
 season_19_long %>% 
   filter(rating == "ortg") %>% 
   semi_join(bubble_teams, by = "nameTeam") %>% #only teams that were invited to bubble
@@ -221,7 +224,8 @@ season_19_long %>%
                               "Playoffs"),
                      name = "Time Period") +
   xlab("Offensive Rating") + 
-  ylab(NULL)
+  ylab(NULL) + 
+  ggtitle('NBA team ratings near the end of the 2019 season - Offense')
 
 season_19_long %>% 
   filter(rating == "drtg") %>%
@@ -254,13 +258,16 @@ season_19_long %>%
                               "Playoffs"),
                      name = "Time Period") +
   xlab("Net Rating (Offensive - Defensive)") + 
-  ylab(NULL)+ ggtitle('NBA team ratings near the end of the 2019 season - Offense')
+  ylab(NULL)+ 
+  ggtitle('NBA team ratings near the end of the 2019 season - Net')
 
 ```
+  
 ### Players
 
-If the COVID bubble did not impact team performance, what about COVID itself? A number of players 
-were reported to have contracted the virus during the suspension of the season. We tried to see 
+If the COVID Bubble did not impact team performance, what about COVID itself? A number of 
+specific players were reported to have contracted the virus during the suspension of the season. 
+Most of these players eventually came back to play in the Bubble. We tried to see 
 if this had any kind of lasting impact, regardless of severity of symptoms.
 
 A quick search let us find the complete list of confirmed players that got COVID and 
@@ -278,11 +285,11 @@ even past the end of the season. Although the sample is small, this suggests tha
 players are cleared to play. Comparing the results to player performance from the previous year reinforces this, as there does not seem 
 to be any sort of end of season slump trend among the majority of players.
 
+Note: not every player that contracted COVID and played in the Bubble had game data 
+from near the end of the previous season. These names were intentionally left in to 
+make comparison between both graphs more convenient.
 ```{r echo = FALSE, message = FALSE, results='hide'}
-covid_players <-
-  read_html("https://www.slamonline.com/nba/nba-coronavirus-covid-list/") %>%
-  html_element(css = ".wp-block-table") %>%
-  html_table(header = TRUE)
+covid_players <- read_csv("data/covid_players.csv")
 
 covid_players_fixed <- covid_players %>%
   rename(name = "Player",
@@ -405,12 +412,13 @@ covid_players_fixed %>%
   scale_color_manual(values = c("month_before" = "#00bcd4",
                               "bubble_seeding" = "#ff9800", 
                               "bubble_playoffs" = "#e91e63"),
-                     labels = c("Month before shutdown",
+                     labels = c("Month before Bubble",
                               "Bubble seeding games",
                               "Bubble playoffs"),
                      name = "Time Period") +
-  xlab("Players that contracted COVID") + 
-  ylab("Net Rating (Bubble 2019-20)")
+  xlab("Players") + 
+  ylab("Net Rating") + 
+  ggtitle('NBA player ratings before/during the 2020 COVID Bubble')
 
 
 player_names_to_compare <- covid_players_fixed %>%
@@ -450,12 +458,13 @@ covid_players_fixed %>%
     name = "Time Period"
   ) +
   xlab("Players that contracted COVID") + 
-  ylab("Net Rating (2018-19)")
+  ylab("Net Rating") + 
+  ggtitle('NBA player ratings near the end of the 2019 season')
 
 
 ```
   
-## Effect of Kobe's Demise
+## Kobe Bryant Demise Effect
 ### Approach
 
 We followed a 3 step approach to analyze the effect Kobe Bryant's death had on the NBA teams and players.
@@ -478,7 +487,7 @@ Note: For visualization purposes, we harnessed the Net Rating parameter (netrtg)
 
 We compared the net rating of every team before and after Bryant's decease. As mentioned previously, we divided the dataframe accordingly for the top 15 and bottom 15 teams (division based on net rating score of the 2020 season).
 
-```{r}
+```{r echo = FALSE, message = FALSE, results='hide'}
 team_data_2020_after_26 <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "team", tables = "general", modes = "PerGame", date_from = "1-26-20", date_to = "2-9-20")$dataTable[[1]]
 team_data_2020_before_26 <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "team", tables = "general", modes = "PerGame", date_from = "1-5-20", date_to = "1-25-20")$dataTable[[1]]
 
@@ -515,11 +524,26 @@ values_to="value")
 pivoted_bar_plot_df_2020_top_teams
 ```
 
-```{r}
-ggplot(pivoted_bar_plot_df_2020_top_teams, aes(x=teams, y=value, fill=variable)) +geom_bar(stat='identity', position='dodge')+coord_flip()+ggtitle('Performance Comparision of Top 15 Teams Before and After Event')
-```
-```{r}
-ggplot(pivoted_bar_plot_df_2020_bottom_teams, aes(x=teams, y=value, fill=variable)) +geom_bar(stat='identity', position='dodge')+coord_flip()+ggtitle('Performance Comparision of Bottom 15 Teams Before and After Event')
+```{r echo = FALSE, message = FALSE, results='hide'}
+ggplot(pivoted_bar_plot_df_2020_top_teams, aes(x=teams, y=value, fill=variable)) +
+  geom_bar(stat='identity', position='dodge')+
+  coord_flip()+
+  ggtitle("Performance Comparision of Top 15 Teams",
+          subtitle = "Before and After Event (Death)") + 
+    scale_fill_discrete(labels = c("Before death",
+                              "After death"),
+                     name = "Time Period") + 
+  xlab("Teams") + 
+  ylab("Net Rating")
+
+ggplot(pivoted_bar_plot_df_2020_bottom_teams, aes(x=teams, y=value, fill=variable)) +geom_bar(stat='identity', position='dodge')+coord_flip()+ggtitle('Performance Comparision of Bottom 15 Teams',
+subtitle = 'Before and After Event (Control)') +
+  scale_fill_discrete(labels = c("Before 26th",
+                              "After 26th"),
+                     name = "Time Period") + 
+  xlab("Teams") + 
+  ylab("Net Rating")
+  
 ```
 
 Differences in the net ratings were observed in every team. However, small fluctuations in net rating is normal. When we have a look at the two graphs, we notice that Brooklyn Nets show a significant improvement in their performance, while Utah jazz shows a significant slump in its performance. Other teams whose net rating declined after Kobe's death were Lakers, Clippers, 76ers, Spurs, Bulls, Mavericks. 
@@ -540,11 +564,9 @@ Dallas Mavericks: The Mavericks were performing pretty well before 26th of Janua
 
 Philadelphia 76ers: Kobe Bryant was born in Philadelphia. Given this fact, plus the deteriorating performance statistic, we chose to have a better look at the 76ers too.
 
-```{r}
+```{r echo = FALSE, message = FALSE, results='hide'}
 selected_teams_years_analysis = c('Los Angeles Lakers','LA Clippers','Dallas Mavericks','Philadelphia 76ers','Utah Jazz')
-```
 
-```{r}
 selected_team_data_2020_after_26 <- subset(team_data_2020_after_26,nameTeam %in% selected_teams_years_analysis) 
 team_data_2019_after_26 <- teams_players_stats(seasons = 2019, measures = "Advanced", types = "team", tables = "general", modes = "PerGame", date_from = "1-26-19", date_to = "2-9-19")$dataTable[[1]]
 selected_team_data_2019_after_26 <- subset(team_data_2019_after_26,nameTeam %in% selected_teams_years_analysis) 
@@ -558,35 +580,32 @@ team_data_2016_after_26 <- teams_players_stats(seasons = 2016, measures = "Advan
 selected_team_data_2016_after_26 <- subset(team_data_2016_after_26,nameTeam %in% selected_teams_years_analysis) 
 consolidated_selected_data <- rbind(selected_team_data_2020_after_26,selected_team_data_2019_after_26,selected_team_data_2018_after_26 ,selected_team_data_2017_after_26, selected_team_data_2016_after_26,selected_team_data_2021_after_26)
 consolidated_selected_data
-```
-```{r}
+
 date<-as.POSIXct(consolidated_selected_data$rangeDateTo,format = '%m-%d-%Y')
 year <- as.numeric(format(date,format = '%Y'))
 consolidated_selected_data <- cbind(consolidated_selected_data,year)
-```
 
-```{r}
-ggplot(data = consolidated_selected_data, aes(x=year,y=netrtg, group=nameTeam, color=nameTeam)) +geom_line() +geom_point() +ylab('Net Rating')+ggtitle('Net Ratings of teams over the years in January')
+ggplot(data = consolidated_selected_data, aes(x=year,y=netrtg, group=nameTeam, color=nameTeam)) +geom_line() +geom_point() +ylab('Net Rating')+ggtitle('Net Ratings of teams over the years in January') + 
+  scale_color_discrete(name = "Team")
 ```
+  
 The 76ers show a slump in performance compared to their other seasons. This maybe due to the fact that the people of Philadelphia mourned Kobe's loss (audience sentiment does play a role in boosting players' morale).
 
-The Utah Jazz to show a performance dip. This may or may not be due to the loss of Kobe Bryant, since the downtrend began in the previous season. Moreover, Bryant didnt have much of an association with the Jazz (apart from the fact that he played his final Lakers game against them).
+The Utah Jazz to show a performance dip. This may or may not be due to the loss of Kobe Bryant, since the downtrend began in the previous season. Moreover, Bryant didn't have much of an association with the Jazz (apart from the fact that he played his final Lakers game against them).
 
-However, unexpectedly it turns out that the Lakers and CLippers weren't really affected by the loss, since both teams saw their best Jan/Feb performance over 4 years in 2020. The mavericks did show deteriorating statistics, but one cannot conlude that it was because of Bryant because their 2021 season turns out to be worse.
+However, unexpectedly it turns out that the Lakers and Clippers weren't really affected by the loss, since both teams saw their best Jan/Feb performance over 4 years in 2020. The mavericks did show deteriorating statistics, but one cannot conlude that it was because of Bryant because their 2021 season turns out to be worse.
 
 ### Player Performance
 
 Apart from a team sentiment, death of someone close affects a specific person more than the entire group. Hence, we decided to have a look at the players who were close to Kobe, and then saw if his death affected their performance. 
 
-The list of players was obtained from [A celebrity entertainment website](https://www.thethings.com/15-nba-stars-kobe-bryant-was-close-to/). The players obtained were 'Carmelo Anthony','LeBron James','Anthony Davis','Trae Young','Kevin Durant','Stephen Curry' and 'Chris Paul'.
+The list of players was obtained from [A celebrity entertainment website](https://www.thethings.com/15-nba-stars-kobe-bryant-was-close-to/). The players obtained were 'Carmelo Anthony','LeBron James','Anthony Davis','Trae Young','Kevin Durant','Stephen Curry' and 'Chris Paul'. However, Steph Curry and Kevin Durant did not play during this period in 2020 so they were omitted. Trae Young and Anthony Davis were also the only two to have a 
+control to compare to.
 
 
+```{r echo = FALSE, message = FALSE, results='hide'}
+kobe_bryant_friends <- c('Carmelo Anthony','LeBron James','Anthony Davis','Trae Young','Chris Paul')
 
-```{r}
-kobe_bryant_friends <- c('Carmelo Anthony','LeBron James','Anthony Davis','Trae Young','Kevin Durant','Stephen Curry','Chris Paul')
-```
-
-```{r}
 return_time <- function(x)
 {
   if(x == 1)
@@ -594,9 +613,7 @@ return_time <- function(x)
   else
     return ('After 26th')
 }
-```
 
-```{r}
 team_data_2020_after_26 <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "player", tables = "general", modes = "PerGame", date_from = "1-26-20", date_to = "2-16-20")$dataTable[[1]]
 team_data_2020_before_26 <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "player", tables = "general", modes = "PerGame", date_from = "1-12-20", date_to = "1-25-20")$dataTable[[1]]
 team_data_2019_after_26 <- teams_players_stats(seasons = 2019, measures = "Advanced", types = "player", tables = "general", modes = "PerGame", date_from = "1-26-19", date_to = "2-16-19")$dataTable[[1]]
@@ -615,12 +632,20 @@ colnames(df)<-c('status')
 consolidated_player_data <- cbind(consolidated_player_data,df)
 consolidated_player_data <- cbind(consolidated_player_data,year)
 consolidated_player_data
-```
-```{r}
-ggplot(consolidated_player_data, aes(x=namePlayer, y=netrtg, fill=status)) +geom_bar(stat='identity', position='dodge')+facet_wrap(~year,ncol=1)+coord_flip()+ggtitle('Players vs Net Rating')
+
+ggplot(consolidated_player_data, aes(x=namePlayer, y=netrtg, fill=status)) +
+  geom_bar(stat='identity', position='dodge')+facet_wrap(~year,ncol=1)+coord_flip()+ggtitle('Players vs. Net Rating') +
+    scale_fill_discrete(labels = c("Before death",
+                              "After death"),
+                     name = "Time Period") +
+  scale_fill_discrete(labels = c("Before 26th",
+                              "After 26th"),
+                     name = "Time Period") + 
+  xlab("Teams") + 
+  ylab("Net Rating") 
 ```
 
-From the above graph, it could be said that the demise didn't affect most players. Chris Paul is one such player who showed a drop in performance after the 26th of January. This maybe possible due to bryant's death because Chris Paul was really close to Bryant (both of them represented USA in the Olympics).Moreover, the sports media has highlighted their friendship a plenitude of times.
+From the above graph, it could be said that the demise didn't affect most players. Chris Paul is one such player who showed a drop in performance after the 26th of January. This maybe possible due to Kobe's death because Chris Paul was really close to Bryant (both of them represented USA in the Olympics). Moreover, the sports media has highlighted their friendship a plenitude of times.
 
 A few players like Lebron, have shown a significant performance improvement. This maybe because 
 the death didn't affect him as much as we thought it would. OR
@@ -638,10 +663,10 @@ After necessary preprocessing and cleaning, we see if there is a correlation bet
 
 ### Injured parts vs player position
 
-The data generation for this step has been covered in the data cleaning section
+The data generation for this step has been covered in the data cleaning section.
 
-
-```{r}
+Note: we really struggled to get a better output for these labels! 
+```{r echo = FALSE, message = FALSE,  results='hide', fig.width=9}
 preprocessedInjuryData <- read.csv('data/preprocessedInjuryData.csv')
 preprocessedInjuryData <- preprocessedInjuryData %>%
                           select(-Acquired)
@@ -650,21 +675,22 @@ new<-injuryData_2017 %>% group_by(typeInjury) %>% summarise(n=n()) %>% top_n(7)
 temp<-new['typeInjury']
 tempList <- c(temp$typeInjury)
 injuryData_2017 <-subset(injuryData_2017,typeInjury %in% tempList )
-```
 
-```{r}
-vcd::mosaic(typeInjury ~ position1,main = 'Injury vs Position: 2017',spacing = vcd::spacing_equal(sp = unit(0, "lines")),labeling = vcd::labeling_border(rot_labels = c(90, -90, 0, 0),gp_labels = gpar(fontsize = 6),gp_varnames = gpar(fontsize = 14, fontface = 1),pos_labels = "center",just_labels = "center"),injuryData_2017,highlighting_fill = brewer.pal(n = 8, 'Blues'))
+injuryData_2017 %>% 
+  rename(Position = "position1",
+         Injury = "typeInjury") %>% 
+vcd::mosaic(Injury ~ Position,main = 'Injury vs Position: 2017',spacing = vcd::spacing_equal(sp = unit(0, "lines")),labeling = vcd::labeling_border(rot_labels = c(90, -90, 0, 0),gp_labels = gpar(fontsize = 10),gp_varnames = gpar(fontsize = 14, fontface = 1),pos_labels = "center",just_labels = "center"),.,highlighting_fill = brewer.pal(n = 8, 'Blues'))
 ```
+  
 The above mosaic plot depicts the correlation between Injury types and Player Positions. It clearly demonstrates an association between the position and injury. From the plot, it can be obtained that almost all positions have similar proportion of injuries.
 
 Knee and ankle injuries are really common in Basketball. This is due to the fact that falling from a height, jumping lay  a phenomenal amount of stress on the lower part of your feet. It is noticed that the Guards (point guard specifically) face a great number of knee injuries, while the forwards face a greater number of ankle injuries.
 
-```{r}
+```{r echo = FALSE, message = FALSE,  results='hide'}
 ggplot(injuryData_2017)+
   geom_bar(aes(x = typeInjury,),)+
   coord_flip() +
-  labs(x = "Injury",y="Number of players injured",title = "Injury by position")+facet_wrap(~position1,ncol=3)+ggtitle('Injury By Kind Faceted Over Position')#+
-  #scale_fill_brewer(palette = brewer.pal(n = 7, 'Blues'))
+  labs(x = "Injury",y="Number of players injured",title = "Injury by position")+facet_wrap(~position1,ncol=3)+ggtitle('Injury By Kind Faceted Over Position') 
 ```
 
 The above graph gives a clearer depiction of various injuries, faceted by position. The forwards see a greater proportion of knee injuries when compared to Guards and Centers.The guards on the other hand see a greater proportion of knee injuries when compared to forwards.
@@ -673,23 +699,27 @@ Thw word 'rest' denotes that the player was facing a mild injury/susceptible to 
 
 ### Injuries over the years
 
-```{r}
+```{r echo = FALSE, message = FALSE,  results='hide'}
 linePlotDataFrame<-preprocessedInjuryData %>% group_by(position1,year) %>% summarize(n=n())
-linePlotDataFrame %>% ggplot( aes(x=year,y=n, group=position1, color=position1)) +geom_line() +geom_point()+ggtitle('Number of Injuries over the years by playing position')
+linePlotDataFrame %>% ggplot( aes(x=year,y=n, group=position1, color=position1)) +
+  geom_line() +
+  geom_point()+
+  ggtitle('Number of Injuries over the years by playing position') + 
+  xlab("Year") + 
+  ylab("Count") +
+  scale_color_discrete(name = "Position")
 ```
+  
 Clearly, the number of injuries have increased over time, except the 2020 and 2021 (due to lesser matches played). The shooting guard has seen a significant increase when compared to others, while the center continues to be a safe space.
 
-```{r}
+```{r echo = FALSE, message = FALSE,  results='hide'}
 new<-preprocessedInjuryData %>% group_by(typeInjury) %>% summarise(n=n()) %>% top_n(7)
 temp<-new['typeInjury']
 tempList <- c(temp$typeInjury)
 treeMapDataFrame <-subset(preprocessedInjuryData,typeInjury %in% tempList )
 treeMapDataFrame <- treeMapDataFrame %>% group_by(position1,year,typeInjury) %>% summarize(n=n())
-```
 
-```{r}
-
-treemap(treeMapDataFrame,index = c('year','typeInjury'),vSize = 'n',type = 'index',title="Treemap for Injury Kinds over the years")
+treemap(treeMapDataFrame,index = c('year','typeInjury'),vSize = 'n',type = 'index',title="Injury types over the years")
 ```
 
 The aim of the treemap is to show which body parts are prone to injury over the years. There has been no significant change in the trend of the type of injuries. Knee and Ankle take up a lions share in each section. Back injuries and hamstring injuries also are consistently observed in every year.

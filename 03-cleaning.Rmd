@@ -88,7 +88,7 @@ bottom_teams <- team_list[1:15]
 top_teams <- team_list[16:30]
 ```
 
-This was followed by a series of subsetting and pivoting operations so that we could get the net rating of teams within the pre bryant as well as the post bryant timeframe. We pivotted longer on the net rating variable
+This was followed by a series of subsetting and pivoting operations so that we could get the net rating of teams within the pre-Kobe as well as the post-Kobe timeframe. We pivotted longer on the net rating variable.
 
 
 ```{r eval = FALSE, echo = TRUE}
@@ -106,7 +106,7 @@ pivoted_bar_plot_df_2020_top_teams
 ```
 
 
-A similar approach was taken to obtain team statistics for years before and after Kobe's death.I We retrieved the team performance statistics for previous years till 2017 season, and subsetted only those teams in our selected teams list.
+A similar approach was taken to obtain team statistics for years before and after Kobe's death. We retrieved the team performance statistics for previous years till 2017 season, and subsetted only those teams in our selected teams list.
 
 
 ```{r eval = FALSE, echo = TRUE}
@@ -122,7 +122,7 @@ team_data_2016_after_26 <- teams_players_stats(seasons = 2016, measures = "Advan
 selected_team_data_2016_after_26 <- subset(team_data_2016_after_26,nameTeam %in% selected_teams_years_analysis) 
 
 ```
-We then bind the row data for all the years together, and mutate the dataframe obtained with the corresponding year.
+We then bound the row data for all the years together, and mutated the dataframe obtained with the corresponding year.
 
 ```{r eval = FALSE, echo = TRUE}
 
@@ -134,7 +134,7 @@ consolidated_selected_data <- cbind(consolidated_selected_data,year)
 
 ```
 
-Lastly, we obtain a list of Kobe's friends, and their gameplay statistics for the 2020 season and 2019 season (from 12th Jan to 16th February).
+Lastly, we obtained a list of Kobe's friends, and their gameplay statistics for the 2020 season and 2019 season (from 12th Jan to 16th February).
 
 ```{r eval = FALSE, echo = TRUE}
 kobe_bryant_friends <- c('Carmelo Anthony','LeBron James','Anthony Davis','Trae Young','Kevin Durant','Stephen Curry','Chris Paul')
@@ -148,9 +148,9 @@ team_data_2019_after_26 <- teams_players_stats(seasons = 2019, measures = "Advan
 team_data_2019_before_26 <- teams_players_stats(seasons = 2019, measures = "Advanced", types = "player", tables = "general", modes = "PerGame", date_from = "1-12-19", date_to = "1-25-19")$dataTable[[1]]
 ```
 
-We then clean the data obtained by a series of subsetting operations, and then by lengthening the data using a row bind(). 
+We then cleaned the data obtained by a series of subsetting operations, and then by lengthening the data using a row bind(). 
 
-```{r}
+```{r eval = FALSE, echo = TRUE}
 selected_players_data_2020_after_26 <- subset(team_data_2020_after_26,namePlayer %in% kobe_bryant_friends)
 selected_players_data_2020_before_26 <- subset(team_data_2020_before_26,namePlayer %in% kobe_bryant_friends)
 selected_players_data_2019_after_26 <- subset(team_data_2019_after_26,namePlayer %in% kobe_bryant_friends)
@@ -160,7 +160,7 @@ consolidated_player_data <- rbind(selected_players_data_2020_after_26,selected_p
 
 ```
 
-## Injury and Player positions
+## Injury and player positions
 
 The data for the entire analysis is retrieved by iterating and scraping through 1,291 pages of http://www.prosportstransactions.com/basketball. 
 
@@ -195,7 +195,7 @@ write.csv(allYearsdf,'basketballScrapingOutput.csv')
 
 ```
 
-The data we have scraped needs to be cleaned. All the players who are injured are generally placed in a list known as the relinquished list. We make sure that all the data we have scraped has player names and no blank values. Apart from that, it was observed that the player names scraped has a space before the words. Hence a trim operation was done to remove the space.
+The data we have scraped needs to be cleaned. All the players who are injured are generally placed in a list known as the relinquished list. We make sure that all the data we have scraped has player names and no blank values. Apart from that, it was observed that the player names scraped have a space before the words. Hence a trim operation was done to remove the space.
 
 ```{r eval = FALSE, echo = TRUE}
 newDf = read.csv('basketballScrapingOutput.csv')
@@ -204,7 +204,7 @@ newDf<-newDf[!newDf$Relinquished == '',]
 newDf
 ```
 
-Post the retrieval,we merge the injury data we scraped with the player data from the NBA statistics package (nbaStatR). This is followed by data processing where we add the year in which the injury took place.
+Post the retrieval, we merged the injury data we scraped with the player data from the NBA statistics package (nbaStatR). This was followed by data processing where we added the year in which the injury took place.
 
 ```{r eval = FALSE, echo = TRUE}
 playerData<-dictionary_bref_players()
@@ -215,14 +215,14 @@ injuredPlayerData<-cbind(injuredPlayerData,year)
 injuredPlayerData
 ```
 
-For our detailed analysis, we consider the last 8 years. Beyond this range, the analysis may prove to be futile, since basketball as a game evolves fairly quickly over time.
+For our detailed analysis, we considered the last 8 years. Beyond this range, the analysis may prove to be futile, since basketball as a game evolves fairly quickly over time.
 
 ```{r eval = FALSE, echo = TRUE}
 yearsList <- sort(unique(injuredPlayerData$year),decreasing = TRUE)
 yearsList <- yearsList[1:8]
 ```
 
-The player data we have contains urls to the players profiles on basketball-reference.com/players. We scraped the position and hand(i.e Left Hand or Right Hand) from the urls and merged it to the injury player data we have procured.
+The player data we had contained URLs to the players profiles on basketball-reference.com/players. We scraped the position and hand (i.e Left Hand or Right Hand) from the URLs and merged it to the injury player data we have procured.
 
 ```{r eval = FALSE, echo = TRUE}
 topPlayerInjuryData <-subset(injuredPlayerData,year %in% yearsList )
@@ -232,7 +232,7 @@ df<-data.frame(matrix(unlist(positionalData), nrow=length(positionalData), byrow
 colnames(df)<-c('position1','hand')
 ```
 
-The data we possess now is holistic, with injury notes over 8 years. However, on visualizing the data, it was observed that the position field contained non-atomic entries (Since a player may have played at more than one position). Hence, we made sure the position field is atomic by separating the value onto two different rows.
+The data at this point was holistic, with injury notes over 8 years. However, on visualizing the data, it was observed that the position field contained non-atomic entries (Since a player may have played at more than one position). Hence, we made sure the position field is atomic by separating the value onto two different rows.
 
 ```{r eval = FALSE, echo = TRUE}
 mergedPlayerInjuryData<-cbind(topPlayerInjuryData,df)
@@ -242,7 +242,7 @@ mergedPlayerInjuryData[!mergedPlayerInjuryData$position1 == '',]
 mergedPlayerInjuryData
 ```
 
-The injury notes do not give us a clear cut idea of injury the player had. Hence, we categorize the injuries of the players. The categories are obtained from the NBA injury types statistic.
+The injury notes do not give us a clear cut idea of injury the player had. Hence, we categorized the injuries of the players. The categories were obtained from the NBA injury types statistic.
 
 ```{r eval = FALSE, echo = TRUE}
 injuryDataNba <- bref_injuries()
@@ -250,7 +250,8 @@ injuryClasses <- c(unique(injuryDataNba$typeInjury))
 ```
 
 
-We create a function known as categoryDefine(), that will take in the injury notes, and the injurycategories as input parameters, and will retuirn back the most befitting category for a given entry. We then column bind this category to the injury dataset. 
+We created a function known as categoryDefine(), that took in the injury notes, and the injury 
+categories as input parameters, and returned back the most befitting category for a given entry. We then column bound this category to the injury dataset. 
 
 ```{r eval = FALSE, echo = TRUE}
 notesList <- preprocessedInjuryData$Notes
