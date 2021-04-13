@@ -17,12 +17,10 @@ COVID on athletic performance.
 The graphs also would have benefited from some side-by-side facets along the type of rating. However, because defensive ratings 
 are measured differently, the x-axis needed to be flipped. Apparently, 
 it is a common complaint in the R community that there is no easy way to change the scale of individual facets. 
+Furthermore, the player data could have benefited from a facet as well, but because the time period variables were different between dataframes, 
+it was difficult to work that out.
 
-## Kobe
-
-## Injuries
-=======
-## Kobe's Demise
+## Kobe Bryant Demise Effect
 
 The conclusion of the effect of Kobe's death can be divided into 3 parts:
 
@@ -37,22 +35,24 @@ The conclusion of the effect of Kobe's death can be divided into 3 parts:
   
 Overall, it could be said that Philadelphia 76ers was affected among the teams, and Chris Paul was affected among the players. Nevertheless, these are just speculations, and does not take all external factors into account. 
 
-## Injuries and Positions
+## Injury and Positions
 
 The three most important variables that were considered while answering this question were : Player Positions, Kind Of Injury and Year of Injury.
 
 The mosaic and the faceted bar graph plot demonstrate the relation player position has with injury. 
 
-  a)In 2017, The forwards generally had a good number of injuries, with a ratio of ankle to knee injuries being greater than 0.75. 
-  b)The guards on the other hand had a lesser number of injuries, and a greater proportion of knee injuries (ankle to knee injury ratio being around 0.5 -0.6)
-  c) Back and foot are two other body parts that affect players in every position
+  a) In 2017, The forwards generally had a good number of injuries, with a ratio of ankle to knee injuries being greater than 0.75. 
+  b) The guards on the other hand had a lesser number of injuries, and a greater proportion of knee injuries (ankle to knee injury ratio being around 0.5 -0.6).
+  c) Back and foot are two other body parts that affect players in every position.
 
 However, Over the years, these conclusions have changes(see line graph). 
 
   a) With time the guards are picking up a greater number of injuries. Shooting guards have seen the maximum number of injuries in the recent years. This change can be seen because a shooting guard is generally the player who takes the 3 pointers, and with time we are seeing an increase in the number of 3 pointers.
   
-```{r}
+```{r echo = FALSE, message = FALSE, results='hide'}
 library(nbastatR)
+library(tidyverse)
+
 three_points_attempted <- c()
 count<-0
 seasons <-c(2020,2019,2018,2017,2016,2015,2014)
@@ -64,11 +64,12 @@ for(i in seasons)
   print(sum(three_point_data$fg3a))
 }
 df <- data.frame(seasons,three_points_attempted)
+
 df %>% ggplot( aes(x=seasons,y=three_points_attempted)) +geom_line() +geom_point()+ggtitle('Three points over the years')
 ```
   
   
   b) 2020 and 2021 have lesser injuries. This is because 2020 had lesser matches (COVID) and players have played only 3 months in 2021.
   
-  c) Center has shown a uniform increase in the number of injuries, and continues to be the safest (least injury prone) position to play in
+  c) Center has shown a uniform increase in the number of injuries, and continues to be the safest (least injury prone) position to play in.
   
