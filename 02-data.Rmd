@@ -1,4 +1,45 @@
 # Data sources
+---
+title: "Data Sources"
+author: "Rahul Subramaniam, Santos Hernandez"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r, include=TRUE}
+SOLUTIONS <- FALSE
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = SOLUTIONS, 
+                      eval = SOLUTIONS, cache = FALSE)
+library(tidyverse)
+```
+
+
+
+```{r}
+# keep this chunk in your .Rmd file
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+
+The NBA tools are available as a part of the nbaStatR package. We install it using the devtools package offered by github.
+
+
+```{r}
+library(nbastatR)
+library(future)
+plan(multiprocess) 
+```
+
+
+
+c) Sampole view of Data 
+```{r}
+game_logs(seasons = 2010:2019)
+```
+
+
+
 
 ## Game statistics
 In the NBA, the largest source of game statistics comes from the league itself. This data is 
@@ -35,13 +76,17 @@ based on the underlying player statistics.
 A single table was scraped from a [basketball magazine's website](https://www.slamonline.com/nba/nba-coronavirus-covid-list/) 
 (SLAM) to get a list of players that were confirmed to have COVID, and when it was reported by the magazine.
 
+### Kobe Bryant's Connections 
+
+A 1 Dimensional list of players was obtained from a [Celebrity lifestyle website](https://www.thethings.com/15-nba-stars-kobe-bryant-was-close-to/) (The Things) to get a list of players who were close friends of Kobe Bryant.
+
 ## Player positions and injuries
 
 We also needed other data that went beyond game statistics: player position data and injury data. 
 The NBA also makes this data somewhat available on its website, does not aggregate and release it 
 as conveniently. Player position data is limited only to forward, guard, and center, 
 while most think of the game as played in 5 positions - point guard, shooting guard, small forward, power forward, and center. 
-Injury data available on the website is only for current injuries, and is not historical. 
+Injury data available on the NBA website is only for current injuries, and is not historical. 
 
 ////EXPAND VVV
 We turned to [Basketball Reference](https://www.basketball-reference.com/about/ratings.html) for more complete player profiles. T
@@ -60,3 +105,6 @@ on the number of games played before a certain date, but the API lacks this slic
 It might be possible pull the box scores of every single game, count out and filter based on date, and then create the averages manually, 
 but this approach would be a significant amount of work for perhaps a small change in results. As previously stated, 
 we are looking for differences in general performance.
+Inconsistency was observed in the naming conventions of the basketball positions. E.g. the position scraped for a player was observed to be Guard, but on a study of that players position,it was found out that he played Point Guard.
+Many players have a nicknames/unofficial names that a few of the data sources use.Hence, keeping track of player information while subsetting and filtering out data was an issue.
+

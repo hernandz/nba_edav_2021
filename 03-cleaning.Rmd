@@ -2,6 +2,8 @@
 
 ## Game statistics
 
+### COVID cases
+
 When using the NBA stats R package, requested data comes as a nested dataframe. 
 Each row has data for a single season, with either regular season or playoff data. 
 So if you requested 2018-19 and 2019-2020 data for the regular season and playoffs, 
@@ -43,7 +45,6 @@ bubble_stats_long <- bind_rows(covid_season_month_before,
 
 The same process was used for both team and player data because they come in the same form.
 
-### COVID cases
 
 Some additional steps were taken to integrate the COVID case data. The table from SLAM was 
 crawled with `rvest` and cleaned slightly to be able to join onto the player stats. Furthermore, 
@@ -63,10 +64,211 @@ covid_players_fixed <- covid_players %>%
 
 ```
 
-## Injuries
+## Kobe Bryant Demise Effect
 
-## Player positions
+Similar to the format in the COVID cases problem, the data for every NBA team comes as a nested dataframe. However, this time the time frame of the data to be analyzed is much lesser (data ranges from 3 weeks before and 2 weeks after Kobe's death). Hence, we cannot request the data for all seasons in one go, and must selectively obtain the data for each season.
 
+We obtained the data for every season in two separate dataframes: 
+
+1. The data for every team before Kobe's demise ( range from 5th January to 25th of January)
+2. The data for every team after Kobe's demise (range from 26th January to 9th of February)
+
+For the sake of analysis and visualization, we had to divide the 30 NBA teams into top 15 and bottom 15 (based on the net rating score for every team in the 2020 season).
+
+```{r eval = FALSE, echo = TRUE}
+team_data_2020_after_26 <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "team", tables = "general", modes = "PerGame", date_from = "1-26-20", date_to = "2-9-20")$dataTable[[1]]
+
+team_data_2020_before_26 <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "team", tables = "general", modes = "PerGame", date_from = "1-5-20", date_to = "1-25-20")$dataTable[[1]]
+
+ordered_team_data_2020_after_death <-team_data_2020_after_26[order(team_data_2020_after_26[,41]),]
+
+
+team_list <- ordered_team_data_2020_after_death$nameTeam
+bottom_teams <- team_list[1:15]
+top_teams <- team_list[16:30]
+```
+
+This was followed by a series of subsetting and pivoting operations so that we could get the net rating of teams within the pre bryant as well as the post bryant timeframe. We pivotted longer on the net rating variable
+
+
+```{r eval = FALSE, echo = TRUE}
+team_data_2020_after_26_top_teams <- subset(team_data_2020_after_26,nameTeam %in% top_teams)
+netrating_after_26<- team_data_2020_after_26_top_teams$netrtg
+
+teams <- team_data_2020_after_26_top_teams$nameTeam
+bar_plot_df_2020_top_teams <- data.frame(teams,netrating_before_26,netrating_after_26)
+
+pivoted_bar_plot_df_2020_top_teams <- pivot_longer(bar_plot_df_2020_top_teams,cols = c('netrating_before_26','netrating_after_26'),names_to='variable', 
+values_to="value")
+
+netrating_after_26<- team_data_2020_after_26_bottom_teams$netrtg
+pivoted_bar_plot_df_2020_top_teams
+```
+
+
+A similar approach was taken to obtain team statistics for years before and after Kobe's death.I We retrieved the team performance statistics for previous years till 2017 season, and subsetted only those teams in our selected teams list.
+
+
+```{r eval = FALSE, echo = TRUE}
+selected_teams_years_analysis = c('Los Angeles Lakers','LA Clippers','Dallas Mavericks','Philadelphia 76ers','Utah Jazz')
+
+team_data_2018_after_26 <- teams_players_stats(seasons = 2018, measures = "Advanced", types = "team", tables = "general", modes = "PerGame", date_from = "1-26-18", date_to = "2-9-18")$dataTable[[1]]
+selected_team_data_2018_after_26 <- subset(team_data_2018_after_26,nameTeam %in% selected_teams_years_analysis) 
+
+team_data_2017_after_26 <- teams_players_stats(seasons = 2017, measures = "Advanced", types = "team", tables = "general", modes = "PerGame", date_from = "1-26-17", date_to = "2-9-17")$dataTable[[1]]
+selected_team_data_2017_after_26 <- subset(team_data_2017_after_26,nameTeam %in% selected_teams_years_analysis) 
+
+team_data_2016_after_26 <- teams_players_stats(seasons = 2016, measures = "Advanced", types = "team", tables = "general", modes = "PerGame", date_from = "1-26-16", date_to = "2-9-16")$dataTable[[1]]
+selected_team_data_2016_after_26 <- subset(team_data_2016_after_26,nameTeam %in% selected_teams_years_analysis) 
+
+```
+We then bind the row data for all the years together, and mutate the dataframe obtained with the corresponding year.
+
+```{r eval = FALSE, echo = TRUE}
+
+consolidated_selected_data <- rbind(selected_team_data_2020_after_26,selected_team_data_2019_after_26,selected_team_data_2018_after_26 ,selected_team_data_2017_after_26, selected_team_data_2016_after_26,selected_team_data_2021_after_26)
+
+date<-as.POSIXct(consolidated_selected_data$rangeDateTo,format = '%m-%d-%Y')
+year <- as.numeric(format(date,format = '%Y'))
+consolidated_selected_data <- cbind(consolidated_selected_data,year)
+
+```
+
+Lastly, we obtain a list of Kobe's friends, and their gameplay statistics for the 2020 season and 2019 season (from 12th Jan to 16th February).
+
+```{r eval = FALSE, echo = TRUE}
+kobe_bryant_friends <- c('Carmelo Anthony','LeBron James','Anthony Davis','Trae Young','Kevin Durant','Stephen Curry','Chris Paul')
+
+team_data_2020_after_26 <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "player", tables = "general", modes = "PerGame", date_from = "1-26-20", date_to = "2-16-20")$dataTable[[1]]
+
+team_data_2020_before_26 <- teams_players_stats(seasons = 2020, measures = "Advanced", types = "player", tables = "general", modes = "PerGame", date_from = "1-12-20", date_to = "1-25-20")$dataTable[[1]]
+
+team_data_2019_after_26 <- teams_players_stats(seasons = 2019, measures = "Advanced", types = "player", tables = "general", modes = "PerGame", date_from = "1-26-19", date_to = "2-16-19")$dataTable[[1]]
+
+team_data_2019_before_26 <- teams_players_stats(seasons = 2019, measures = "Advanced", types = "player", tables = "general", modes = "PerGame", date_from = "1-12-19", date_to = "1-25-19")$dataTable[[1]]
+```
+
+We then clean the data obtained by a series of subsetting operations, and then by lengthening the data using a row bind(). 
+
+```{r}
+selected_players_data_2020_after_26 <- subset(team_data_2020_after_26,namePlayer %in% kobe_bryant_friends)
+selected_players_data_2020_before_26 <- subset(team_data_2020_before_26,namePlayer %in% kobe_bryant_friends)
+selected_players_data_2019_after_26 <- subset(team_data_2019_after_26,namePlayer %in% kobe_bryant_friends)
+selected_players_data_2019_before_26 <- subset(team_data_2019_before_26,namePlayer %in% kobe_bryant_friends)
+
+consolidated_player_data <- rbind(selected_players_data_2020_after_26,selected_players_data_2020_before_26,selected_players_data_2019_after_26,selected_players_data_2019_before_26)
+
+```
+
+## Injury and Player positions
+
+The data for the entire analysis is retrieved by iterating and scraping through 1,291 pages of http://www.prosportstransactions.com/basketball. 
+
+```{r eval = FALSE, echo = TRUE}
+count <- c(1:1291)
+pageNumbers <- (count-1)*25
+commonUrl <- 'http://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=&EndDate=&ILChkBx=yes&Submit=Search&start='
+allYearsdf <- data.frame(Date=character(),Team=character(), Acquired=character(), Relinquished=character(), Notes=character()) 
+```
+
+```{r eval = FALSE, echo = TRUE}
+for (i in pageNumbers)
+{
+url <- paste(c(commonUrl,i),collapse='')
+page <- read_html(url)
+print(url)
+content <- page %>%
+  html_node('div.container') %>%
+  html_node('table.datatable') %>%
+  html_table()
+headings <- head(content,1)
+df<-content
+colnames(df) <-c(headings)
+df <- df[-1,]
+x<-'•'
+df$Relinquished<-sub(x,'',df$Relinquished)
+df$Acquired<-sub(x,'',df$Acquired)
+allYearsdf<-rbind(allYearsdf,df)
+}
+
+write.csv(allYearsdf,'basketballScrapingOutput.csv')
+
+```
+
+The data we have scraped needs to be cleaned. All the players who are injured are generally placed in a list known as the relinquished list. We make sure that all the data we have scraped has player names and no blank values. Apart from that, it was observed that the player names scraped has a space before the words. Hence a trim operation was done to remove the space.
+
+```{r eval = FALSE, echo = TRUE}
+newDf = read.csv('basketballScrapingOutput.csv')
+newDf$Relinquished <-str_trim(newDf$Relinquished)
+newDf<-newDf[!newDf$Relinquished == '',]
+newDf
+```
+
+Post the retrieval,we merge the injury data we scraped with the player data from the NBA statistics package (nbaStatR). This is followed by data processing where we add the year in which the injury took place.
+
+```{r eval = FALSE, echo = TRUE}
+playerData<-dictionary_bref_players()
+injuredPlayerData<-merge(newDf,playerData,by.x='Relinquished',by.y='namePlayerBREF')
+date<-as.POSIXct(injuredPlayerData$Date,format = '%Y-%m-%d')
+year <- as.numeric(format(date,format = '%Y'))
+injuredPlayerData<-cbind(injuredPlayerData,year)
+injuredPlayerData
+```
+
+For our detailed analysis, we consider the last 8 years. Beyond this range, the analysis may prove to be futile, since basketball as a game evolves fairly quickly over time.
+
+```{r eval = FALSE, echo = TRUE}
+yearsList <- sort(unique(injuredPlayerData$year),decreasing = TRUE)
+yearsList <- yearsList[1:8]
+```
+
+The player data we have contains urls to the players profiles on basketball-reference.com/players. We scraped the position and hand(i.e Left Hand or Right Hand) from the urls and merged it to the injury player data we have procured.
+
+```{r eval = FALSE, echo = TRUE}
+topPlayerInjuryData <-subset(injuredPlayerData,year %in% yearsList )
+injuredPlayerUrls <- topPlayerInjuryData['urlPlayerBioBREF']
+positionalData<-lapply(injuredPlayerUrls[[1]], scrapPositionalData)
+df<-data.frame(matrix(unlist(positionalData), nrow=length(positionalData), byrow=TRUE))
+colnames(df)<-c('position1','hand')
+```
+
+The data we possess now is holistic, with injury notes over 8 years. However, on visualizing the data, it was observed that the position field contained non-atomic entries (Since a player may have played at more than one position). Hence, we made sure the position field is atomic by separating the value onto two different rows.
+
+```{r eval = FALSE, echo = TRUE}
+mergedPlayerInjuryData<-cbind(topPlayerInjuryData,df)
+mergedPlayerInjuryData <- separate_rows(mergedPlayerInjuryData,position1,sep="and")
+mergedPlayerInjuryData <- separate_rows(mergedPlayerInjuryData,position1,sep=",")
+mergedPlayerInjuryData[!mergedPlayerInjuryData$position1 == '',]
+mergedPlayerInjuryData
+```
+
+The injury notes do not give us a clear cut idea of injury the player had. Hence, we categorize the injuries of the players. The categories are obtained from the NBA injury types statistic.
+
+```{r eval = FALSE, echo = TRUE}
+injuryDataNba <- bref_injuries()
+injuryClasses <- c(unique(injuryDataNba$typeInjury))
+```
+
+
+We create a function known as categoryDefine(), that will take in the injury notes, and the injurycategories as input parameters, and will retuirn back the most befitting category for a given entry. We then column bind this category to the injury dataset. 
+
+```{r eval = FALSE, echo = TRUE}
+notesList <- preprocessedInjuryData$Notes
+injuryCategoryPlayers<-lapply(notesList, categoryDefine)
+df<-data.frame(matrix(unlist(injuryCategoryPlayers), nrow=length(injuryCategoryPlayers), byrow=TRUE))
+colnames(df)<-c('typeInjury')
+preprocessedInjuryData<-cbind(preprocessedInjuryData,df)
+```
+
+The last step in the cleaning process was to get rid of the anomalous rows. We replaced the position Guard with Point Guard (since in a 2-2-1 zone formation a point guard is called a guard) and Forward with Small Forward (since in a 2-2-1 zone formation a point guard is called a forward). There were hardly any entries that were NA, but a few entries with '' in the column. We got rid of them by removing the rows with these values.
+
+```{r eval = FALSE, echo = TRUE}
+preprocessedInjuryData$position1[preprocessedInjuryData$position1 == 'Guard'] <- 'PointGuard'
+preprocessedInjuryData$position1[preprocessedInjuryData$position1 == 'Forward'] <- 'SmallForward'
+preprocessedInjuryData<-preprocessedInjuryData[!preprocessedInjuryData$Relinquished == '',]
+preprocessedInjuryData<-preprocessedInjuryData[!preprocessedInjuryData$position1 == '',]
+
+```
 
 ## d3
 
